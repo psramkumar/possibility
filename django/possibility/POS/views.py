@@ -1,1 +1,6 @@
-# Create your views here.
+"""
+Views for the POS
+
+@author Matthew Scott
+@version $Id$
+"""

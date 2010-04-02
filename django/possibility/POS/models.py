@@ -1,3 +1,10 @@
+"""
+Models for the POS
+
+@author Matthew Scott
+@version $Id$
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
 
