@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 
 /**
- *
+ * User ORM matching Django's User model
  * @author Matthew Scott
  * @version $Id$
  */
@@ -16,38 +16,74 @@ public class User {
     private boolean isActive, isStaff, isSuperuser;
     private Date lastLogin, dateJoined;
 
+    /**
+     *
+     * @return
+     */
     public Date getDateJoined() {
         return dateJoined;
     }
 
+    /**
+     *
+     * @param dateJoined
+     */
     public void setDateJoined(Date dateJoined) {
         this.dateJoined = dateJoined;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getLastLogin() {
         return lastLogin;
     }
 
+    /**
+     *
+     * @param lastLogin
+     */
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     *
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     *
+     * @param firstName
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getId() {
         return id;
     }
@@ -56,50 +92,98 @@ public class User {
         this.id = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isIsActive() {
         return isActive;
     }
 
+    /**
+     *
+     * @param isActive
+     */
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isIsStaff() {
         return isStaff;
     }
 
+    /**
+     *
+     * @param isStaff
+     */
     public void setIsStaff(boolean isStaff) {
         this.isStaff = isStaff;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isIsSuperuser() {
         return isSuperuser;
     }
 
+    /**
+     *
+     * @param isSuperuser
+     */
     public void setIsSuperuser(boolean isSuperuser) {
         this.isSuperuser = isSuperuser;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     *
+     * @param lastName
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     *
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
@@ -129,6 +213,12 @@ public class User {
         return buf.toString();
     }
 
+    /**
+     *
+     * @param plaintext
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public String generateNewPasswordHash(String plaintext) throws NoSuchAlgorithmException {
         StringBuffer pwhash = new StringBuffer("sha1$");
         Random r = new Random();

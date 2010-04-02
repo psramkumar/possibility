@@ -12,8 +12,7 @@ import org.hibernate.Session;
  * @author Matthew Scott
  * @version $Id$
  */
-public class App 
-{
+public class App {
     public static void main( String[] args )
     {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
