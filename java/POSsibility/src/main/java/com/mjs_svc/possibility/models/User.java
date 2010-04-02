@@ -7,7 +7,8 @@ import java.util.Random;
 
 /**
  *
- * @author Matthew
+ * @author Matthew Scott
+ * @version $Id$
  */
 public class User {
     private long id;

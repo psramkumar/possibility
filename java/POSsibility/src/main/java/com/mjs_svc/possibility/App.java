@@ -7,8 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import org.hibernate.Session;
 
 /**
- * Hello world!
+ * Soon to be the main app, but now just a tiny testbed
  *
+ * @author Matthew Scott
+ * @version $Id$
  */
 public class App 
 {
