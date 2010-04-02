@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!-- Django User (django.contrib.auth.models.User) -->
+    <class name="com.mjs_svc.possibility.models.User" table="auth_user">
+        <id name="id" column="id">
+            <generator class="native" />
+        </id>
+        <property name="username"/>
+        <property name="password" />
+        <property name="firstName" column="first_name" />
+        <property name="lastName" column="last_name" />
+        <property name="email" />
+        <property name="dateJoined" type="timestamp" column="date_joined" />
+        <property name="lastLogin" type="timestamp" column="last_login" />
+        <property name="isActive" column="is_active" />
+        <property name="isStaff" column="is_staff" />
+        <property name="isSuperuser" column="is_superuser" />
+    </class>
+<!--
+    <class name="com.mjs_svc.possibility.models.Creator" table="POS_creator"></class>
+
+    <class name="com.mjs_svc.possibility.models.Customer" table="POS_customer"></class>
+
+    <class name="com.mjs_svc.possibility.models.Employee" table="POS_employee"></class>
+
+    <class name="com.mjs_svc.possibility.models.Item" table="POS_item"></class>
+
+    <class name="com.mjs_svc.possibility.models.Order" table="POS_order"></class>
+
+    <class name="com.mjs_svc.possibility.models.Position" table="POS_position"></class>
+
+    <class name="com.mjs_svc.possibility.models.Product" table="POS_product"></class>
+
+    <class name="com.mjs_svc.possibility.models.TimeClockEvent" table="POS_timeclockevent"></class>
+
+    <class name="com.mjs_svc.possibility.models.Transaction" table="POS_transaction"></class>
+
+    <class name="com.mjs_svc.possibility.models.TroubleTicket" table="POS_troubleticket"></class>
+-->
+</hibernate-mapping>
