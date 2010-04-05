@@ -10,10 +10,27 @@ package com.mjs_svc.possibility.models;
  * @version $Id$
  */
 public class Transaction {
-
     private int id, type;
     private Order order;
     private String description;
+    private double amount;
+    private Site site;
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 
     public String getDescription() {
         return description;

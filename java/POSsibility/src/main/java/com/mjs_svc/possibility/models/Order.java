@@ -4,7 +4,7 @@
  */
 package com.mjs_svc.possibility.models;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  *
@@ -17,7 +17,33 @@ public class Order {
     private User owner, isActive;
     private boolean isShared;
     private Date ctime, mtime;
-    private String state, payment, googleId, cartXml, notes;
+    private String name, state, payment, googleId, cartXml, notes;
+    private Site site;
+    private Set troubleTickets = new HashSet();
+
+    public Set getTroubleTickets() {
+        return troubleTickets;
+    }
+
+    public void setTroubleTickets(Set troubleTickets) {
+        this.troubleTickets = troubleTickets;
+    }
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getCartXml() {
         return cartXml;

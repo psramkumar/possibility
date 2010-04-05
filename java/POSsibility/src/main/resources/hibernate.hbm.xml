@@ -5,165 +5,236 @@
 @version $Id$
 -->
 <hibernate-mapping>
-    <!-- Django User (django.contrib.auth.models.User) -->
-    <class name="com.mjs_svc.possibility.models.User" table="auth_user">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <property name="username"/>
-        <property name="password" />
-        <property name="firstName" column="first_name" />
-        <property name="lastName" column="last_name" />
-        <property name="email" />
-        <property name="dateJoined" type="timestamp" column="date_joined" />
-        <property name="lastLogin" type="timestamp" column="last_login" />
-        <property name="isActive" column="is_active" />
-        <property name="isStaff" column="is_staff" />
-        <property name="isSuperuser" column="is_superuser" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Creator" table="pos_creator">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <one-to-one name="user" column="user_id"
-            class="com.mjs_svc.possibility.models.User" />
-        <property name="profile" />
-        <property name="phone" />
-        <property name="address1" />
-        <property name="address2" />
-        <property name="city" />
-        <property name="state" />
-        <property name="zipcode" />
-        <property name="country" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Customer" table="pos_customer">
-            <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <one-to-one name="user" column="user_id"
-            class="com.mjs_svc.possibility.models.User" />
-        <property name="organization" />
-        <property name="phone" />
-        <property name="address1" />
-        <property name="address2" />
-        <property name="city" />
-        <property name="state" />
-        <property name="zipcode" />
-        <property name="country" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Employee" table="pos_employee">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <one-to-one name="user" column="user_id"
-            class="com.mjs_svc.possibility.models.User" />
-        <many-to-one name="position" column="position_id"
-            class="com.mjs_svc.possibility.models.Position" />
-        <property name="phone" />
-        <property name="address1" />
-        <property name="address2" />
-        <property name="city" />
-        <property name="state" />
-        <property name="zipcode" />
-        <property name="country" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Item" table="pos_item">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <many-to-one name="order" column="order_id"
-            class="com.mjs_svc.possibility.models.Order" />
-        <many-to-one name="product" column="product_id"
-            class="com.mjs_svc.possibility.models.Product" />
-        <property name="quantity" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Order" table="pos_order">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <many-to-one name="owner" column="owner_id"
-            class="com.mjs_svc.possibility.models.Customer" />
-        <one-to-one name="isActive" column="is_active_id"
-            class="com.mjs_svc.possibility.models.Customer" />
-        <property name="name" />
-        <property name="ctime" type="timestamp" />
-        <property name="mtime" type="timestamp" />
-        <property name="localStatus" column="local_status" />
-        <property name="state" />
-        <property name="payment" />
-        <property name="googleId" column="google_id" />
-        <property name="cartXml" column="cart_xml" />
-        <property name="notes" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Position" table="pos_position">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <property name="name" />
-        <property name="shortDescription" column="short_description" />
-        <property name="longDescription" column="long_description" />
-        <property name="type" />
-        <property name="pay" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Product" table="pos_product">
-        <id name="sku" column="sku">
-            <generator class="assigned" />
-        </id>
-        <property name="quantity" />
-        <property name="name" />
-        <property name="shortDescription" column="short_desc" />
-        <property name="longDescription" column="long_desc" />
-        <many-to-one name="creator" column="creator_id"
-            class="com.mjs_svc.possibility.models.Creator" />
-        <property name="width" />
-        <property name="length" />
-        <property name="height" />
-        <property name="price" />
-        <property name="status" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.TimeClockEvent" 
-        table="pos_timeclockevent">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <many-to-one name="user" column="user_id"
-            class="com.mjs_svc.possibility.models.Employee" />
-        <property name="ctime" type="timestamp" />
-        <property name="clockin" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.Transaction" 
-        table="pos_transaction">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <property name="type" />
-        <property name="amount" />
-        <many-to-one name="order" column="order_id"
-            class="com.mjs_svc.possibility.models.Order" />
-        <property name="description" />
-    </class>
-
-    <class name="com.mjs_svc.possibility.models.TroubleTicket" 
-        table="pos_troubleticket">
-        <id name="id" column="id">
-            <generator class="native" />
-        </id>
-        <many-to-one name="order" column="order_id"
-            class="com.mjs_svc.possibility.models.Order" />
-        <many-to-one name="owner" column="owner_id"
-            class="com.mjs_svc.possibility.models.Employee" />
-        <property name="problem" />
-        <property name="solution" />
-        <property name="status" />
-        <property name="priority" />
-    </class>
+  <!-- Django Site (django.contrib.sites.models.Site) -->
+  <class name="com.mjs_svc.possibility.models.Site" table="django_site">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="domain"/>
+    <property name="name"/>
+  </class>
+  <!-- Django Content Type (django.contrib.contenttypes.models.ContentType) -->
+  <class name="com.mjs_svc.possibility.models.ContentType" table="django_content_type">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name"/>
+    <property column="app_label" name="appLabel"/>
+    <property name="model"/>
+  </class>
+  <!-- Django Permission (django.contrib.auth.models.Permission) -->
+  <class name="com.mjs_svc.possibility.models.Permission" table="auth_permission">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name"/>
+    <many-to-one class="com.mjs_svc.possibility.models.ContentType" column="content_type_id" name="contentType"/>
+    <property column="codename" name="codeName"/>
+    <set name="users" table="auth_user_user_permissions">
+      <key column="permission_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.User" column="user_id"/>
+    </set>
+    <set name="groups" table="auth_group_permissions">
+      <key column="permission_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.Group" column="group_id"/>
+    </set>
+  </class>
+  <!-- Django User (django.contrib.auth.models.User) -->
+  <class name="com.mjs_svc.possibility.models.User" table="auth_user">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="username"/>
+    <property name="password"/>
+    <property column="first_name" name="firstName"/>
+    <property column="last_name" name="lastName"/>
+    <property name="email"/>
+    <property column="date_joined" name="dateJoined" type="timestamp"/>
+    <property column="last_login" name="lastLogin" type="timestamp"/>
+    <property column="is_active" name="isActive"/>
+    <property column="is_staff" name="isStaff"/>
+    <property column="is_superuser" name="isSuperuser"/>
+    <one-to-one class="com.mjs_svc.possibility.models.Creator" name="creator" property-ref="user"/>
+    <one-to-one class="com.mjs_svc.possibility.models.Customer" name="customer" property-ref="user"/>
+    <one-to-one class="com.mjs_svc.possibility.models.Employee" name="employee" property-ref="user"/>
+    <set name="permissions" table="auth_user_user_permissions">
+      <key column="user_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.Permission" column="permission_id"/>
+    </set>
+    <set name="groups" table="auth_user_groups">
+      <key column="user_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.Group" column="group_id"/>
+    </set>
+  </class>
+  <!-- Django Group (django.contrib.auth.models.Group) -->
+  <class name="com.mjs_svc.possibility.models.Group" table="auth_group">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name"/>
+    <set name="permissions" table="auth_group_permissions">
+      <key column="group_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.Permission" column="permission_id"/>
+    </set>
+    <set name="users" table="auth_user_groups">
+      <key column="group_id"/>
+      <many-to-many class="com.mjs_svc.possibility.models.User" column="user_id"/>
+    </set>
+  </class>
+  <!-- Django Message (django.contrib.auth.models.Message) -->
+  <class name="com.mjs_svc.possibility.models.Message" table="auth_message">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.User" column="user_id" name="user"/>
+    <property name="message"/>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Creator" table="pos_creator">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.User" column="user_id" name="user" unique="true"/>
+    <property name="profile"/>
+    <property name="phone"/>
+    <property name="address1"/>
+    <property name="address2"/>
+    <property name="city"/>
+    <property name="state"/>
+    <property name="zipcode"/>
+    <property name="country"/>
+    <set inverse="true" name="products">
+      <key column="creator_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.Creator"/>
+    </set>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Customer" table="pos_customer">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.User" column="user_id" name="user" unique="true"/>
+    <property name="organization"/>
+    <property name="phone"/>
+    <property name="address1"/>
+    <property name="address2"/>
+    <property name="city"/>
+    <property name="state"/>
+    <property name="zipcode"/>
+    <property name="country"/>
+    <one-to-one class="com.mjs_svc.possibility.models.Order" name="activeCart" property-ref="isActive"/>
+    <set inverse="true" name="orders">
+      <key column="owner_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.Order"/>
+    </set>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Employee" table="pos_employee">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.User" column="user_id" name="user" unique="true"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Position" column="position_id" name="position"/>
+    <property name="phone"/>
+    <property name="address1"/>
+    <property name="address2"/>
+    <property name="city"/>
+    <property name="state"/>
+    <property name="zipcode"/>
+    <property name="country"/>
+    <set inverse="true" name="timeClockEvents">
+      <key column="user_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.TimeClockEvent"/>
+    </set>
+    <set inverse="true" name="troubleTickets">
+      <key column="owner_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.TroubleTicket"/>
+    </set>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Item" table="pos_item">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Order" column="order_id" name="order"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Product" column="product_id" name="product"/>
+    <property name="quantity"/>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Order" table="pos_order">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Site" column="site_id" name="site"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Customer" column="owner_id" name="owner"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Customer" column="is_active_id" name="isActive" unique="true"/>
+    <property name="name"/>
+    <property name="ctime" type="timestamp"/>
+    <property name="mtime" type="timestamp"/>
+    <property column="local_status" name="localStatus"/>
+    <property name="state"/>
+    <property name="payment"/>
+    <property column="google_id" name="googleId"/>
+    <property column="cart_xml" name="cartXml"/>
+    <property name="notes"/>
+    <set inverse="true" name="troubleTickets">
+      <key column="order_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.TroubleTicket"/>
+    </set>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Position" table="pos_position">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <property name="name"/>
+    <property column="short_description" name="shortDescription"/>
+    <property column="long_description" name="longDescription"/>
+    <property name="type"/>
+    <property name="pay"/>
+    <set inverse="true" name="employees">
+      <key column="position_id"/>
+      <one-to-many class="com.mjs_svc.possibility.models.Employee"/>
+    </set>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Product" table="pos_product">
+    <id column="sku" name="sku">
+      <generator class="assigned"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Site" column="site_id" name="site"/>
+    <property name="quantity"/>
+    <property name="name"/>
+    <property column="short_desc" name="shortDescription"/>
+    <property column="long_desc" name="longDescription"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Creator" column="creator_id" name="creator"/>
+    <property name="width"/>
+    <property name="length"/>
+    <property name="height"/>
+    <property name="price"/>
+    <property name="status"/>
+  </class>
+  <class name="com.mjs_svc.possibility.models.TimeClockEvent" table="pos_timeclockevent">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Employee" column="user_id" name="user"/>
+    <property name="ctime" type="timestamp"/>
+    <property name="clockin"/>
+  </class>
+  <class name="com.mjs_svc.possibility.models.Transaction" table="pos_transaction">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Site" column="site_id" name="site"/>
+    <property name="type"/>
+    <property name="amount"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Order" column="order_id" name="order"/>
+    <property name="description"/>
+  </class>
+  <class name="com.mjs_svc.possibility.models.TroubleTicket" table="pos_troubleticket">
+    <id column="id" name="id">
+      <generator class="native"/>
+    </id>
+    <many-to-one class="com.mjs_svc.possibility.models.Site" column="site_id" name="site"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Order" column="order_id" name="order"/>
+    <many-to-one class="com.mjs_svc.possibility.models.Employee" column="owner_id" name="owner"/>
+    <property name="problem"/>
+    <property name="solution"/>
+    <property name="status"/>
+    <property name="priority"/>
+  </class>
 </hibernate-mapping>

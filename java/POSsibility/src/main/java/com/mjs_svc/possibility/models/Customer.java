@@ -5,6 +5,8 @@
 
 package com.mjs_svc.possibility.models;
 
+import java.util.*;
+
 /**
  *
  * @author Matthew Scott
@@ -15,6 +17,24 @@ public class Customer {
     private User user;
     private String organization, phone, address1, address2,
             city, state, zipcode, country;
+    private Order activeCart;
+    private Set orders = new HashSet();
+
+    public Set getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set orders) {
+        this.orders = orders;
+    }
+
+    public Order getActiveCart() {
+        return activeCart;
+    }
+
+    public void setActiveCart(Order activeCart) {
+        this.activeCart = activeCart;
+    }
 
     public String getAddress1() {
         return address1;

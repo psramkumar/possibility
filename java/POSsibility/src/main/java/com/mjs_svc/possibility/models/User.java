@@ -1,9 +1,8 @@
 package com.mjs_svc.possibility.models;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.util.*;
 import java.security.MessageDigest;
-import java.util.Random;
 
 /**
  * User ORM matching Django's User model
@@ -15,6 +14,90 @@ public class User {
     private String username, password, firstName, lastName, email;
     private boolean isActive, isStaff, isSuperuser;
     private Date lastLogin, dateJoined;
+    private Creator creator;
+    private Customer customer;
+    private Employee employee;
+    private Set permissions = new HashSet(), groups = new HashSet();
+
+    /**
+     *
+     * @return
+     */
+    public Set getGroups() {
+        return groups;
+    }
+
+    /**
+     * 
+     * @param groups
+     */
+    public void setGroups(Set groups) {
+        this.groups = groups;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Set getPermissions() {
+        return permissions;
+    }
+
+    /**
+     *
+     * @param permissions
+     */
+    public void setPermissions(Set permissions) {
+        this.permissions = permissions;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Creator getCreator() {
+        return creator;
+    }
+
+    /**
+     * 
+     * @param creator
+     */
+    public void setCreator(Creator creator) {
+        this.creator = creator;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    /**
+     * 
+     * @param customer
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    /**
+     * 
+     * @param employee
+     */
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     /**
      *

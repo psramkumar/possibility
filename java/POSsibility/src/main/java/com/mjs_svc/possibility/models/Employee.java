@@ -5,6 +5,8 @@
 
 package com.mjs_svc.possibility.models;
 
+import java.util.*;
+
 /**
  *
  * @author Matthew Scott
@@ -15,6 +17,23 @@ public class Employee {
     private User user;
     private Position position;
     private String phone, address1, address2, city, state, zipcode, country;
+    private Set timeClockEvents = new HashSet(), troubleTickets = new HashSet();
+
+    public Set getTroubleTickets() {
+        return troubleTickets;
+    }
+
+    public void setTroubleTickets(Set troubleTickets) {
+        this.troubleTickets = troubleTickets;
+    }
+
+    public Set getTimeClockEvents() {
+        return timeClockEvents;
+    }
+
+    public void setTimeClockEvents(Set timeClockEvents) {
+        this.timeClockEvents = timeClockEvents;
+    }
 
     public String getAddress1() {
         return address1;

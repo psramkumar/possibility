@@ -10,11 +10,19 @@ package com.mjs_svc.possibility.models;
  * @version $Id$
  */
 public class TroubleTicket {
-
     private int id, status, priority;
     private Order order;
     private Employee owner;
     private String problem, solution;
+    private Site site;
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
 
     public int getId() {
         return id;

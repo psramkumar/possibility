@@ -5,6 +5,8 @@
 
 package com.mjs_svc.possibility.models;
 
+import java.util.*;
+
 /**
  *
  * @author Matthew Scott
@@ -14,6 +16,15 @@ public class Position {
     private int id, type;
     private String name, shortDescription, longDescription;
     private double pay;
+    private Set employees = new HashSet();
+
+    public Set getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set employees) {
+        this.employees = employees;
+    }
 
     public int getId() {
         return id;

@@ -15,6 +15,15 @@ public class Product {
     private int quantity, status;
     private double width, length, height, price;
     private Creator creator;
+    private Site site;
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
 
     public Creator getCreator() {
         return creator;

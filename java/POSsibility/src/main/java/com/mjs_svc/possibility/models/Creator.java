@@ -5,6 +5,8 @@
 
 package com.mjs_svc.possibility.models;
 
+import java.util.*;
+
 /**
  *
  * @author Matthew Scott
@@ -15,6 +17,15 @@ public class Creator {
     private User user;
     private String profile, phone, address1, address2,
             city, state, zipcode, country;
+    private Set products = new HashSet();
+
+    public Set getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set products) {
+        this.products = products;
+    }
 
     public String getAddress1() {
         return address1;
