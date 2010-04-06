@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mjs_svc.possibility.models;
 
 import java.util.*;
@@ -15,11 +11,36 @@ public class Order {
 
     private int id, localStatus;
     private User owner, isActive;
-    private boolean isShared;
+    private boolean isShared, isGift;
     private Date ctime, mtime;
-    private String name, state, payment, googleId, cartXml, notes;
+    private String name, notes;
     private Site site;
+    private Address shipTo, billTo;
     private Set troubleTickets = new HashSet();
+
+    public boolean isIsGift() {
+        return isGift;
+    }
+
+    public void setIsGift(boolean isGift) {
+        this.isGift = isGift;
+    }
+
+    public Address getBillTo() {
+        return billTo;
+    }
+
+    public void setBillTo(Address billTo) {
+        this.billTo = billTo;
+    }
+
+    public Address getShipTo() {
+        return shipTo;
+    }
+
+    public void setShipTo(Address shipTo) {
+        this.shipTo = shipTo;
+    }
 
     public Set getTroubleTickets() {
         return troubleTickets;
@@ -45,28 +66,12 @@ public class Order {
         this.name = name;
     }
 
-    public String getCartXml() {
-        return cartXml;
-    }
-
-    public void setCartXml(String cartXml) {
-        this.cartXml = cartXml;
-    }
-
     public Date getCtime() {
         return ctime;
     }
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
-    }
-
-    public String getGoogleId() {
-        return googleId;
-    }
-
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
     }
 
     public int getId() {
@@ -127,22 +132,6 @@ public class Order {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public String getPayment() {
-        return payment;
-    }
-
-    public void setPayment(String payment) {
-        this.payment = payment;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     //------------------------------------------------------------------------//
