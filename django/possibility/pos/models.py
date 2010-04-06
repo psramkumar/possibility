@@ -7,6 +7,18 @@ Models for the POS
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+
+class Address(models.Model):
+    name = models.CharField(max_length = 200)
+    organization = models.CharField(max_length = 200, blank = True)
+    phone = models.CharField(max_length = 20)
+    address1 = models.CharField(max_length = 250)
+    address2 = models.CharField(max_length = 250, blank = True)
+    city = models.CharField(max_length = 200)
+    state = models.CharField(max_length = 100, blank = True)
+    zipcode = models.CharField(max_length = 10, null = True)
+    country = models.CharField(max_length = 100, blank = True, default = "United States of America")
 
 class Position(models.Model):
     TYPE_CHOICES = (
@@ -25,13 +37,7 @@ class Position(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User)
     position = models.ForeignKey('Position')
-    phone = models.CharField(max_length = 20)
-    address1 = models.CharField(max_length = 250)
-    address2 = models.CharField(max_length = 250, blank = True)
-    city = models.CharField(max_length = 100)
-    state = models.CharField(max_length = 100)
-    zipcode = models.CharField(max_length = 10)
-    country = models.CharField(max_length = 100, blank = True, default = "United States of America")
+    address = models.ForeignKey('Address')
 
 class TimeClockEvent(models.Model):
     user = models.ForeignKey('Employee')
@@ -40,14 +46,8 @@ class TimeClockEvent(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(User)
-    organization = models.CharField(max_length = 250, blank = True)
-    phone = models.CharField(max_length = 20, blank = True)
-    address1 = models.CharField(max_length = 250, blank = True)
-    address2 = models.CharField(max_length = 250, blank = True)
-    city = models.CharField(max_length = 100, blank = True)
-    state = models.CharField(max_length = 100, blank = True)
-    zipcode = models.CharField(max_length = 10, blank = True)
-    country = models.CharField(max_length = 100, blank = True, default = "United States of America")
+    billing_address = models.ForeignKey('Address', related_name = 'customer_billing_address')
+    shipping_addresses = models.ManyToManyField('Address')
 
 class Order(models.Model):
     STATUS_CHOICES = (
@@ -58,6 +58,7 @@ class Order(models.Model):
             (4, 'Offline order'),
             )
 
+    site = models.ForeignKey(Site)
     owner = models.ForeignKey('Customer')
     name = models.CharField(max_length = 125)
     is_active = models.OneToOneField('Customer', null = True, blank = True, related_name = 'active_order')
@@ -65,11 +66,10 @@ class Order(models.Model):
     ctime = models.DateTimeField(auto_now_add = True, blank = False)
     mtime = models.DateTimeField(auto_now = True, blank = False)
     local_status = models.IntegerField(choices = STATUS_CHOICES)
-    state = models.CharField(max_length = 16, blank = True)
-    payment = models.CharField(max_length = 16, blank = True)
-    google_id = models.CharField(max_length = 255, blank = True)
-    cart_xml = models.TextField(blank = True)
     notes = models.TextField(blank = True)
+    bill_to = models.ForeignKey('Address', related_name = 'order_billing_address')
+    ship_to = models.ForeignKey('Address', related_name = 'order_shipping_address')
+    is_gift = models.BooleanField(default = False)
 
     def get_total(self):
         price = 0
@@ -92,6 +92,7 @@ class TroubleTicket(models.Model):
             (3, 'URGENT'),
             )
 
+    site = models.ForeignKey(Site, blank = True, null = True)
     order = models.ForeignKey('Order', blank = True, null = True)
     owner = models.ForeignKey('Employee', blank = True, null = True)
     problem = models.TextField()
@@ -115,6 +116,7 @@ class Transaction(models.Model):
             (7, 'Product purchase'), # Purchase of product with intent to sell
             )
 
+    site = models.ForeignKey(Site)
     type = models.IntegerField(choices = TRANSACTION_TYPES)
     amount = models.DecimalField(max_digits = 8, decimal_places = 2)
     order = models.ForeignKey('Order', blank = True, null = True)
@@ -123,14 +125,7 @@ class Transaction(models.Model):
 class Creator(models.Model):
     user = models.OneToOneField(User)
     profile = models.TextField()
-    phone = models.CharField(max_length = 20)
-    address1 = models.CharField(max_length = 250)
-    address2 = models.CharField(max_length = 250, blank = True)
-    city = models.CharField(max_length = 100)
-    state = models.CharField(max_length = 100)
-    zipcode = models.CharField(max_length = 10)
-    country = models.CharField(max_length = 100, blank = True, default = "United States of America")
-    
+    address = models.ForeignKey('Address')
 
 class Product(models.Model):
     STATUS_CHOICES = (
@@ -141,6 +136,7 @@ class Product(models.Model):
             (4, 'Hidden')
             )
 
+    site = models.ForeignKey(Site)
     sku = models.SlugField(primary_key = True)
     status = models.IntegerField(choices = STATUS_CHOICES)
     quantity = models.IntegerField(default = 0)
