@@ -8,8 +8,8 @@ import java.util.Date;
  * @version $Id$
  */
 public class TimeClockEvent {
-    private int id;
-    private User user;
+    private Long id;
+    private Employee user;
     private Date ctime;
     private boolean clockin;
 
@@ -29,19 +29,19 @@ public class TimeClockEvent {
         this.ctime = ctime;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    private void setId(int id) {
+    private void setId(Long id) {
         this.id = id;
     }
 
-    public User getUser() {
+    public Employee getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Employee user) {
         this.user = user;
     }
 

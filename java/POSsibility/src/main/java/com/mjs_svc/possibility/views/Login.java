@@ -4,7 +4,7 @@ import com.mjs_svc.possibility.App;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import com.mjs_svc.possibility.models.User;
+import com.mjs_svc.possibility.controllers.LoginController;
 import com.mjs_svc.possibility.util.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -25,7 +25,6 @@ public class Login extends JPanel {
     public static final boolean closable = true;
     public static final boolean maximizable = false;
     public static final boolean iconifiable = false;
-
     private JLabel username_label = new JLabel(panelRB.getString("login.username")),
             password_label = new JLabel(panelRB.getString("login.password")),
             error = new JLabel();
@@ -43,6 +42,7 @@ public class Login extends JPanel {
 
         // Fire the submit button's action listener when enter is pressed
         password.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 submit.getActionListeners()[0].actionPerformed(e);
@@ -52,7 +52,16 @@ public class Login extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                doLogin();
+                LoginController login = new LoginController();
+                if (login.doLogin(username.getText(), new String(password.getPassword()))) {
+                    if (a instanceof UserListener) {
+                        a.setUser(login.getUser());
+                    } else {
+                        error.setBackground(Color.MAGENTA);
+                        error.setText(panelRB.getString("login.failure"));
+                    }
+                    finish();
+                }
             }
         });
         add(username_label);
@@ -61,33 +70,15 @@ public class Login extends JPanel {
         add(password);
         add(error);
         add(submit);
+        username.setFocusable(true);
+        username.requestFocus();
     }
 
-    public void doLogin() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        User user = (User) session.createQuery("from User as u where username = ?").setString(0, username.getText()).uniqueResult();
-        try {
-            if (user.authenticate(new String(password.getPassword()))) {
-                error.setBackground(password.getBackground());
-                error.setText(panelRB.getString("login.success"));
-                if (a instanceof UserListener) {
-                    a.setUser(user);
-                }
-                ((JInternalFrame) this
-                        .getParent() // JLayeredPane
-                        .getParent() // JRootPane
-                        .getParent())// JInternalFrame
-                        .dispose();
-            } else {
-                error.setBackground(Color.MAGENTA);
-                error.setText(panelRB.getString("login.failure"));
-            }
-        } catch (NoSuchAlgorithmException e) {
-            //
-        } catch (NullPointerException e) {
-            //
-        }
+    public void finish() {
+        ((JInternalFrame) this.getParent() // JLayeredPane
+                .getParent() // JRootPane
+                .getParent())// JInternalFrame
+                .dispose();
     }
 
     public void setUserListener(UserListener a) {

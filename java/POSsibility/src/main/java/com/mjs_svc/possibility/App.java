@@ -2,6 +2,7 @@ package com.mjs_svc.possibility;
 
 import com.mjs_svc.possibility.util.*;
 import com.mjs_svc.possibility.views.*;
+import com.mjs_svc.possibility.controllers.*;
 import com.mjs_svc.possibility.models.*;
 import java.awt.BorderLayout;
 import java.util.*;
@@ -33,6 +34,7 @@ public class App extends JFrame implements UserListener {
             vtt_all, vtt_mine, vtt_filter, vtt_new; //troubletickets
     private JDesktopPane desktop;
     private Login loginPanel = new Login(); // needed for setting user listener
+    private TimeClockController timeClock = new TimeClockController();
     private StatusBar statusBar = new StatusBar();
     private ResourceBundle menuRB = ResourceBundle.getBundle(
             "MenuTexts",
@@ -48,6 +50,7 @@ public class App extends JFrame implements UserListener {
     public App() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         loginPanel.setUserListener(this);
+        timeClock.setUserListener(this);
         initComponents();
     }
 
@@ -76,16 +79,51 @@ public class App extends JFrame implements UserListener {
                 login.setVisible(true);
                 login.setSize(loginPanel.getSize());
                 desktop.add(login);
+                desktop.setSelectedFrame(login);
             }
         });
         fileMenu.add(f_login);
         f_logout = new JMenuItem(menuRB.getString("file.logout"));
+        f_logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (user.getIsAuthenticated()) {
+                    user.deauthenticate();
+                    setTitle("POSsibility");
+                    statusBar.setStatus(statusRB.getString("onlogout"));
+                    f_logout.setEnabled(false);
+                    f_login.setEnabled(true);
+                    f_clockin.setEnabled(false);
+                    f_clockout.setEnabled(false);
+                }
+            }
+        });
         f_logout.setEnabled(false);
         fileMenu.add(f_logout);
         f_clockin = new JMenuItem(menuRB.getString("file.clockin"));
+        f_clockin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (timeClock.doClockIn(user)) {
+                    statusBar.setStatus("Successfully clocked in");
+                } else {
+                    statusBar.setStatus("Error clocking in");
+                }
+            }
+        });
         f_clockin.setEnabled(false);
         fileMenu.add(f_clockin);
         f_clockout = new JMenuItem(menuRB.getString("file.clockout"));
+        f_clockout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (timeClock.doClockOut(user)) {
+                    statusBar.setStatus("Successfully clocked out");
+                } else {
+                    statusBar.setStatus("Error clocking out");
+                }
+            }
+        });
         f_clockout.setEnabled(false);
         fileMenu.add(f_clockout);
         f_settings = new JMenuItem(menuRB.getString("file.settings"));
@@ -117,7 +155,6 @@ public class App extends JFrame implements UserListener {
             public void windowClosed(WindowEvent e) {
                 try {
                     Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-                    session.getTransaction().commit();
                     session.close();
                 } catch (HibernateException exc) {
                     //
@@ -149,14 +186,24 @@ public class App extends JFrame implements UserListener {
     @Override
     public void setUser(User user) {
         this.user = user;
-        setTitle(this.getTitle() + " (" + user.getUsername() + ")");
-        statusBar.setStatus(statusRB.getString("onlogin").replace("{0}", user.getUsername()));
-        f_login.setEnabled(false);
-        f_logout.setEnabled(true);
-        if (user.getEmployee() instanceof Employee) {
-            // TODO: check whether clocked in, enable accordingly
-            f_clockin.setEnabled(true);
-            f_clockout.setEnabled(true);
+        System.out.println("User set");
+        if (user.getIsAuthenticated()) {
+            f_login.setEnabled(false);
+            f_logout.setEnabled(true);
+            setTitle("POSsibility (" + user.getUsername() + ")");
+            if (user.getEmployee() instanceof Employee) {
+                System.out.println("User is employee");
+                if (user.getEmployee().getIsClockedIn()) {
+                    System.out.println("User is clocked in");
+                    setTitle(getTitle() + " (clocked in)");
+                    f_clockin.setEnabled(false);
+                    f_clockout.setEnabled(true);
+                } else {
+                    System.out.println("User is not clocked in");
+                    f_clockin.setEnabled(true);
+                    f_clockout.setEnabled(false);
+                }
+            }
         }
     }
 }

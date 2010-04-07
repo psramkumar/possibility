@@ -8,11 +8,22 @@ import java.util.*;
  * @version $Id$
  */
 public class Employee {
+
     private int id;
     private User user;
     private Position position;
     private Address address;
-    private Set timeClockEvents = new HashSet(), troubleTickets = new HashSet();
+    private List timeClockEvents;
+    private Set troubleTickets = new HashSet(), tickets = new HashSet();
+    private Boolean _isClockedIn;
+
+    public Set getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Set tickets) {
+        this.tickets = tickets;
+    }
 
     public Address getAddress() {
         return address;
@@ -30,11 +41,11 @@ public class Employee {
         this.troubleTickets = troubleTickets;
     }
 
-    public Set getTimeClockEvents() {
+    public List getTimeClockEvents() {
         return timeClockEvents;
     }
 
-    public void setTimeClockEvents(Set timeClockEvents) {
+    public void setTimeClockEvents(List timeClockEvents) {
         this.timeClockEvents = timeClockEvents;
     }
 
@@ -63,5 +74,16 @@ public class Employee {
     }
 
     //------------------------------------------------------------------------//
+    public boolean getIsClockedIn() {
+        try {
+            _isClockedIn = Boolean.valueOf(((TimeClockEvent) timeClockEvents.get(0)).isClockin());
+        } catch (Throwable t) {
+            return false;
+        }
+        return _isClockedIn.booleanValue();
+    }
 
+    public void setIsClockedIn(boolean isClockedIn) {
+        this._isClockedIn = Boolean.valueOf(isClockedIn);
+    }
 }

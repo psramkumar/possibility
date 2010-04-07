@@ -1,8 +1,10 @@
 package com.mjs_svc.possibility.models;
 
+import com.mjs_svc.possibility.util.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.security.MessageDigest;
+import org.hibernate.Session;
 
 /**
  * User ORM matching Django's User model
