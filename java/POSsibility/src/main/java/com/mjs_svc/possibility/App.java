@@ -20,7 +20,7 @@ import org.hibernate.Session;
 public class App extends JFrame implements UserListener {
     private User user;
     private JMenuBar menuBar;
-    private JMenu fileMenu, editMenu, viewMenu, helpMenu,
+    private JMenu fileMenu, editMenu, viewMenu, toolsMenu, helpMenu,
             viewPeople, vpEmployees, vpCustomers, vpCreators,
             viewProducts, viewOrders, viewTransactions, viewTroubleTickets;
     private JMenuItem
@@ -31,7 +31,8 @@ public class App extends JFrame implements UserListener {
             vpr_all, vpr_filter, vpr_new,           //products
             vo_all, vo_filter,                      //orders
             vtr_all, vtr_filter,                    //transactions
-            vtt_all, vtt_mine, vtt_filter, vtt_new; //troubletickets
+            vtt_all, vtt_mine, vtt_filter, vtt_new, //troubletickets
+            t_changePass;                           //tools
     private JDesktopPane desktop;
     private Login loginPanel = new Login(); // needed for setting user listener
     private TimeClockController timeClock = new TimeClockController();
@@ -105,9 +106,9 @@ public class App extends JFrame implements UserListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (timeClock.doClockIn(user)) {
-                    statusBar.setStatus("Successfully clocked in");
+                    statusBar.setStatus(statusRB.getString("onclockout.success"));
                 } else {
-                    statusBar.setStatus("Error clocking in");
+                    statusBar.setStatus(statusRB.getString("onclockin.fail"));
                 }
             }
         });
@@ -118,9 +119,9 @@ public class App extends JFrame implements UserListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (timeClock.doClockOut(user)) {
-                    statusBar.setStatus("Successfully clocked out");
+                    statusBar.setStatus(statusRB.getString("onclockin.success"));
                 } else {
-                    statusBar.setStatus("Error clocking out");
+                    statusBar.setStatus(statusRB.getString("onclockin.fail"));
                 }
             }
         });
@@ -145,6 +146,12 @@ public class App extends JFrame implements UserListener {
         menuBar.add(editMenu);
         viewMenu = new JMenu(menuRB.getString("view"));
         menuBar.add(viewMenu);
+
+        toolsMenu = new JMenu(menuRB.getString("tools"));
+        t_changePass = new JMenuItem(menuRB.getString("tools.changepassword"));
+        toolsMenu.add(t_changePass);
+        menuBar.add(toolsMenu);
+
         helpMenu = new JMenu(menuRB.getString("help"));
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
@@ -184,9 +191,8 @@ public class App extends JFrame implements UserListener {
     }
 
     @Override
-    public void setUser(User user) {
-        this.user = user;
-        System.out.println("User set");
+    public void setUser(User _user) {
+        user = _user;
         if (user.getIsAuthenticated()) {
             f_login.setEnabled(false);
             f_logout.setEnabled(true);
@@ -194,12 +200,10 @@ public class App extends JFrame implements UserListener {
             if (user.getEmployee() instanceof Employee) {
                 System.out.println("User is employee");
                 if (user.getEmployee().getIsClockedIn()) {
-                    System.out.println("User is clocked in");
                     setTitle(getTitle() + " (clocked in)");
                     f_clockin.setEnabled(false);
                     f_clockout.setEnabled(true);
                 } else {
-                    System.out.println("User is not clocked in");
                     f_clockin.setEnabled(true);
                     f_clockout.setEnabled(false);
                 }

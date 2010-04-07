@@ -75,6 +75,7 @@ public class Login extends JPanel {
     }
 
     public void finish() {
+        //XXX Dispose isn't right.  We need to destroy somewhere
         ((JInternalFrame) this.getParent() // JLayeredPane
                 .getParent() // JRootPane
                 .getParent())// JInternalFrame

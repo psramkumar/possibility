@@ -25,7 +25,8 @@ public class TimeClockController {
                 evt.setUser(emp);
                 evt.setClockin(true);
                 evt.setCtime(new Date());
-                emp.getTimeClockEvents().add(evt);
+                emp.getTimeClockEvents().add(0, evt);
+                emp.setIsClockedIn(true);
                 user.setEmployee(emp);
                 org.hibernate.Transaction tx = null;
                 try {
@@ -44,7 +45,6 @@ public class TimeClockController {
                 a.setUser(user);
                 return true;
             }
-            System.err.println("Already clocked in?");
         }
         return false;
     }
@@ -58,7 +58,8 @@ public class TimeClockController {
                 evt.setUser(emp);
                 evt.setClockin(false);
                 evt.setCtime(new Date());
-                emp.getTimeClockEvents().add(evt);
+                emp.getTimeClockEvents().add(0, evt);
+                emp.setIsClockedIn(false);
                 user.setEmployee(emp);
                 org.hibernate.Transaction tx = null;
                 try {
@@ -77,7 +78,6 @@ public class TimeClockController {
                 a.setUser(user);
                 return true;
             }
-            System.err.println("Already clocked out?");
         }
         return false;
     }
