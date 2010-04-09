@@ -4,7 +4,6 @@ import com.mjs_svc.possibility.util.*;
 import com.mjs_svc.possibility.views.*;
 import com.mjs_svc.possibility.controllers.*;
 import com.mjs_svc.possibility.models.*;
-import java.awt.BorderLayout;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -29,9 +28,10 @@ public class App extends JFrame implements UserListener {
             vpcus_all, vpcus_filter,                //customers
             vpcr_all, vpcr_filter, vpcr_new,        //creators
             vpr_all, vpr_filter, vpr_new,           //products
-            vo_all, vo_filter,                      //orders
-            vtr_all, vtr_filter,                    //transactions
-            vtt_all, vtt_mine, vtt_filter, vtt_new, //troubletickets
+            vo_all, vo_filter, vo_new,              //orders
+            vtr_all, vtr_filter, vtr_new,           //transactions
+            vtt_all, vtt_mine, vtt_unassigned,
+            vtt_filter, vtt_new,                    //troubletickets
             t_changePass;                           //tools
     private JDesktopPane desktop;
     private Login loginPanel = new Login(); // needed for setting user listener
@@ -42,6 +42,9 @@ public class App extends JFrame implements UserListener {
             Locale.getDefault()),
             statusRB = ResourceBundle.getBundle(
             "StatusTexts",
+            Locale.getDefault()),
+            panelRB = ResourceBundle.getBundle(
+            "PanelTexts",
             Locale.getDefault());
 
     public static void main( String[] args ) {
@@ -144,7 +147,96 @@ public class App extends JFrame implements UserListener {
 
         editMenu = new JMenu(menuRB.getString("edit"));
         menuBar.add(editMenu);
+
         viewMenu = new JMenu(menuRB.getString("view"));
+        viewPeople = new JMenu(menuRB.getString("view.people"));
+        vpEmployees = new JMenu(menuRB.getString("view.people.employees"));
+        vpe_all = new JMenuItem(menuRB.getString("view.people.employees.all"));
+        vpe_all.addActionListener(new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmployeesList employees = new EmployeesList(panelRB.getString("all"), "");
+                @SuppressWarnings("static-access")
+                JInternalFrame allEmployees = new JInternalFrame(
+                        employees.title,
+                        employees.resizable,
+                        employees.maximizable,
+                        employees.iconifiable);
+                allEmployees.setContentPane(employees);
+                allEmployees.pack();
+                allEmployees.setVisible(true);
+                desktop.add(allEmployees);
+            }
+        });
+        vpEmployees.add(vpe_all);
+        vpe_filter = new JMenuItem(menuRB.getString("view.people.employees.filter"));
+        vpEmployees.add(vpe_filter);
+        vpEmployees.addSeparator();
+        vpe_new = new JMenuItem(menuRB.getString("view.people.employees.new"));
+        vpEmployees.add(vpe_new);
+        viewPeople.add(vpEmployees);
+
+        vpCreators = new JMenu(menuRB.getString("view.people.creators"));
+        vpcr_all = new JMenuItem(menuRB.getString("view.people.creators.all"));
+        vpCreators.add(vpcr_all);
+        vpcr_filter = new JMenuItem(menuRB.getString("view.people.creators.filter"));
+        vpCreators.add(vpcr_filter);
+        vpCreators.addSeparator();
+        vpcr_new = new JMenuItem(menuRB.getString("view.people.creators.new"));
+        vpCreators.add(vpcr_new);
+        viewPeople.add(vpCreators);
+        
+        vpCustomers = new JMenu(menuRB.getString("view.people.creators"));
+        vpcus_all = new JMenuItem(menuRB.getString("view.people.creators.all"));
+        vpCustomers.add(vpcus_all);
+        vpcus_filter = new JMenuItem(menuRB.getString("view.people.creators.filter"));
+        vpCustomers.add(vpcus_filter);
+        viewPeople.add(vpCustomers);
+        viewMenu.add(viewPeople);
+
+        viewProducts = new JMenu(menuRB.getString("view.products"));
+        vpr_all = new JMenuItem(menuRB.getString("view.products.all"));
+        viewProducts.add(vpr_all);
+        vpr_filter = new JMenuItem(menuRB.getString("view.products.filter"));
+        viewProducts.add(vpr_filter);
+        viewProducts.addSeparator();
+        vpr_new = new JMenuItem(menuRB.getString("view.products.new"));
+        viewProducts.add(vpr_new);
+        viewMenu.add(viewProducts);
+
+        viewOrders = new JMenu(menuRB.getString("view.orders"));
+        vo_all = new JMenuItem(menuRB.getString("view.orders.all"));
+        viewOrders.add(vo_all);
+        vo_filter = new JMenuItem(menuRB.getString("view.orders.filter"));
+        viewOrders.add(vo_filter);
+        viewOrders.addSeparator();
+        vo_new = new JMenuItem(menuRB.getString("view.orders.new"));
+        viewOrders.add(vo_new);
+        viewMenu.add(viewOrders);
+
+        viewTransactions = new JMenu(menuRB.getString("view.transactions"));
+        vtr_all = new JMenuItem(menuRB.getString("view.transactions.all"));
+        viewTransactions.add(vtr_all);
+        vtr_filter = new JMenuItem(menuRB.getString("view.transactions.filter"));
+        viewTransactions.add(vtr_filter);
+        viewTransactions.addSeparator();
+        vtr_new = new JMenuItem(menuRB.getString("view.transactions.new"));
+        viewMenu.add(viewTransactions);
+
+        viewTroubleTickets = new JMenu(menuRB.getString("view.troubletickets"));
+        vtt_all = new JMenuItem(menuRB.getString("view.troubletickets.all"));
+        viewTroubleTickets.add(vtt_all);
+        vtt_mine = new JMenuItem(menuRB.getString("view.troubletickets.mine"));
+        viewTroubleTickets.add(vtt_mine);
+        vtt_unassigned = new JMenuItem(menuRB.getString("view.troubletickets.unassigned"));
+        viewTroubleTickets.add(vtt_unassigned);
+        vtt_filter = new JMenuItem(menuRB.getString("view.troubletickets.filter"));
+        viewTroubleTickets.add(vtt_filter);
+        viewTroubleTickets.addSeparator();
+        vtt_new = new JMenuItem(menuRB.getString("view.troubletickets.new"));
+        viewTroubleTickets.add(vtt_new);
+        viewMenu.add(viewTroubleTickets);
+
         menuBar.add(viewMenu);
 
         toolsMenu = new JMenu(menuRB.getString("tools"));
@@ -198,7 +290,6 @@ public class App extends JFrame implements UserListener {
             f_logout.setEnabled(true);
             setTitle("POSsibility (" + user.getUsername() + ")");
             if (user.getEmployee() instanceof Employee) {
-                System.out.println("User is employee");
                 if (user.getEmployee().getIsClockedIn()) {
                     setTitle(getTitle() + " (clocked in)");
                     f_clockin.setEnabled(false);

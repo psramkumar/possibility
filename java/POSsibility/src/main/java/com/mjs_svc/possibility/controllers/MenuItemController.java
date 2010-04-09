@@ -8,7 +8,9 @@ import java.awt.event.*;
  * @version $Id$
  */
 public class MenuItemController {
+
     public static class LoginMenuItemController implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -16,6 +18,7 @@ public class MenuItemController {
     }
 
     public static class LogoutMenuItemController implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -23,6 +26,7 @@ public class MenuItemController {
     }
 
     public static class ClockinMenuItemController implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -30,6 +34,7 @@ public class MenuItemController {
     }
 
     public static class ClockoutMenuItemController implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             throw new UnsupportedOperationException("Not supported yet.");
