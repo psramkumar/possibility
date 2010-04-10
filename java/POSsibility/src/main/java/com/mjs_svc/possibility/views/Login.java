@@ -56,11 +56,17 @@ public class Login extends JPanel {
                 if (login.doLogin(username.getText(), new String(password.getPassword()))) {
                     if (a instanceof UserListener) {
                         a.setUser(login.getUser());
-                    } else {
-                        error.setBackground(Color.MAGENTA);
-                        error.setText(panelRB.getString("login.failure"));
+                        StatusContainer.getStatusBar().setStatus(
+                                "Logged in!  Welcome, " + login.getUser().getUsername());
+                        finish();
                     }
-                    finish();
+                } else {
+                    username.setText("");
+                    username.requestFocus();
+                    password.setText("");
+                    error.setForeground(Color.RED);
+                    error.setText(panelRB.getString("login.failure"));
+                    repaint();
                 }
             }
         });

@@ -24,6 +24,8 @@ public class LoginController {
             }
         } catch (NoSuchAlgorithmException e) {
             //
+        } catch (NullPointerException e) {
+            return false;
         }
         return false;
     }

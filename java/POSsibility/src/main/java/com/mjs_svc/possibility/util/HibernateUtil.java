@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 /**
+ * Mostly snagged from Hibernate documentation
  *
  * @author Matthew Scott
  * @version $Id$

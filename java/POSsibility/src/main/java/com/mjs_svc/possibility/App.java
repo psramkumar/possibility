@@ -53,6 +53,7 @@ public class App extends JFrame implements UserListener {
 
     public App() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        StatusContainer.setStatusBar(statusBar);
         loginPanel.setUserListener(this);
         timeClock.setUserListener(this);
         initComponents();
@@ -268,12 +269,12 @@ public class App extends JFrame implements UserListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(desktop, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-            .addComponent(statusBar, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+            .addComponent(desktop, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(statusBar, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createSequentialGroup()
-            .addComponent(desktop, GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+            .addComponent(desktop, GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
             .addComponent(statusBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
 
@@ -285,6 +286,7 @@ public class App extends JFrame implements UserListener {
     @Override
     public void setUser(User _user) {
         user = _user;
+        UserContainer.setUser(user);
         if (user.getIsAuthenticated()) {
             f_login.setEnabled(false);
             f_logout.setEnabled(true);
