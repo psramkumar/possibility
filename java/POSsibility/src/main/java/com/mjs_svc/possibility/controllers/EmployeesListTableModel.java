@@ -14,17 +14,17 @@ import org.hibernate.Session;
 public class EmployeesListTableModel extends AbstractTableModel {
 
     private ResourceBundle titlesRB = ResourceBundle.getBundle(
-            "ColumnTitles",
+            "FieldTitles",
             Locale.getDefault());
     private String[] columnNames = {
-        titlesRB.getString("employeeslist.id"),
-        titlesRB.getString("employeeslist.username"),
-        titlesRB.getString("employeeslist.firstname"),
-        titlesRB.getString("employeeslist.familyname"),
-        titlesRB.getString("employeeslist.position"),
-        titlesRB.getString("employeeslist.address"),
-        titlesRB.getString("employeeslist.isclockedin"),
-        titlesRB.getString("employeeslist.troubletickets")
+        titlesRB.getString("employee.id"),
+        titlesRB.getString("user.username"),
+        titlesRB.getString("user.firstname"),
+        titlesRB.getString("user.familyname"),
+        titlesRB.getString("employee.position"),
+        titlesRB.getString("employee.address"),
+        titlesRB.getString("employee.isclockedin"),
+        titlesRB.getString("employee.troubletickets.count")
     };
     
     Object[][] data;
@@ -73,4 +73,5 @@ public class EmployeesListTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         return data[rowIndex][columnIndex];
     }
+
 }
