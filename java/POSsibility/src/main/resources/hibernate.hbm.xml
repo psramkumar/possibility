@@ -59,9 +59,9 @@
     <property name="email"/>
     <property column="date_joined" name="dateJoined" type="timestamp"/>
     <property column="last_login" name="lastLogin" type="timestamp"/>
-    <property column="is_active" name="isActive"/>
-    <property column="is_staff" name="isStaff"/>
-    <property column="is_superuser" name="isSuperuser"/>
+    <property column="is_active" name="active"/>
+    <property column="is_staff" name="staff"/>
+    <property column="is_superuser" name="superuser"/>
     <one-to-one class="com.mjs_svc.possibility.models.Creator" name="creator" property-ref="user"/>
     <one-to-one class="com.mjs_svc.possibility.models.Customer" name="customer" property-ref="user"/>
     <one-to-one class="com.mjs_svc.possibility.models.Employee" name="employee" property-ref="user"/>

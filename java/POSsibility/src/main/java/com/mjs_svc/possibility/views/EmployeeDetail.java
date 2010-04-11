@@ -22,6 +22,8 @@ public class EmployeeDetail extends JPanel {
     private JSpinner id;
     private JComboBox position;
     private AddressDetail address;
+    private JButton create, update, delete;
+
     private Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
     private Employee employee;
     private int employeeId;
@@ -62,6 +64,13 @@ public class EmployeeDetail extends JPanel {
 
         address = new AddressDetail(new Address(), false, true, false);
         sess.getTransaction().commit();
+
+        create = new JButton(rb.getString("create"));
+        create.setEnabled(UserContainer.getUser().hasPermission("add_employee"));
+        update = new JButton(rb.getString("update"));
+        update.setEnabled(UserContainer.getUser().hasPermission("change_employee"));
+        delete = new JButton(rb.getString("delete"));
+        delete.setEnabled(UserContainer.getUser().hasPermission("delete_employee"));
         
         loadData();
 
@@ -73,6 +82,7 @@ public class EmployeeDetail extends JPanel {
         GridBagConstraints fields = new GridBagConstraints();
         fields.gridx = 1;
         fields.weightx = 1;
+        fields.gridwidth = 2;
         fields.fill = GridBagConstraints.HORIZONTAL;
 
         labels.gridy = 0;
@@ -101,12 +111,18 @@ public class EmployeeDetail extends JPanel {
         add(position, fields);
 
         labels.gridy = 5;
-        labels.gridwidth = 2;
+        labels.gridwidth = 3;
         add(address, labels);
 
-        //labels.gridy = 6;
-        //labels.gridwidth = 1;
-
+        labels.gridwidth = 1;
+        labels.gridy = 6;
+        labels.anchor = GridBagConstraints.LINE_START;
+        add(create, labels);
+        fields.gridwidth = 1;
+        fields.gridy = 6;
+        add(update, fields);
+        fields.gridx = 2;
+        add(delete, fields);
     }
 
     private void loadData() {

@@ -4,6 +4,7 @@ import com.mjs_svc.possibility.util.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.security.MessageDigest;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 /**
@@ -14,7 +15,7 @@ import org.hibernate.Session;
 public class User {
     private long id;
     private String username, password, firstName, lastName, email;
-    private boolean isActive, isStaff, isSuperuser;
+    private boolean active, staff, superuser;
     private Date lastLogin, dateJoined;
     private Creator creator;
     private Customer customer;
@@ -181,48 +182,48 @@ public class User {
      *
      * @return
      */
-    public boolean isIsActive() {
-        return isActive;
+    public boolean isActive() {
+        return active;
     }
 
     /**
      *
      * @param isActive
      */
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+    public void setIsActive(boolean active) {
+        this.active = active;
     }
 
     /**
      *
      * @return
      */
-    public boolean isIsStaff() {
-        return isStaff;
+    public boolean isStaff() {
+        return staff;
     }
 
     /**
      *
      * @param isStaff
      */
-    public void setIsStaff(boolean isStaff) {
-        this.isStaff = isStaff;
+    public void setIsStaff(boolean staff) {
+        this.staff = staff;
     }
 
     /**
      *
      * @return
      */
-    public boolean isIsSuperuser() {
-        return isSuperuser;
+    public boolean isSuperuser() {
+        return superuser;
     }
 
     /**
      *
      * @param isSuperuser
      */
-    public void setIsSuperuser(boolean isSuperuser) {
-        this.isSuperuser = isSuperuser;
+    public void setIsSuperuser(boolean superuser) {
+        this.superuser = superuser;
     }
 
     /**
@@ -360,5 +361,35 @@ public class User {
      */
     public boolean getIsAuthenticated() {
         return isAuthenticated;
+    }
+
+    /**
+     * Returns whether or not the user has the given permission
+     * @param perm The permission's codename to check
+     * @return True if the user or the user's groups have that permission, false otherwise
+     */
+    public boolean hasPermission(String perm) {
+        if (isSuperuser()) {
+            return true;
+        }
+        Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
+        sess.beginTransaction();
+        User u = (User) sess.load(User.class, getId());
+        for (Object p : u.getPermissions()) {
+            if (((Permission) p).getCodeName().equals(perm)) {
+                sess.getTransaction().commit();
+                return true;
+            }
+        }
+        for (Object g : u.getGroups()) {
+            for (Object p : ((Group) g).getPermissions()) {
+                if (((Permission) p).getCodeName().equals(perm)) {
+                    sess.getTransaction().commit();
+                    return true;
+                }
+            }
+        }
+        sess.getTransaction().commit();
+        return false;
     }
 }
