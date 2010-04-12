@@ -7,6 +7,7 @@ import com.mjs_svc.possibility.models.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.beans.PropertyVetoException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -84,7 +85,11 @@ public class App extends JFrame implements UserListener {
                 login.setVisible(true);
                 login.setSize(loginPanel.getSize());
                 desktop.add(login);
-                desktop.setSelectedFrame(login);
+                try {
+                    login.setSelected(true);
+                } catch (PropertyVetoException exc) {
+                    //
+                }
             }
         });
         fileMenu.add(f_login);
@@ -94,6 +99,7 @@ public class App extends JFrame implements UserListener {
             public void actionPerformed(ActionEvent e) {
                 if (user.getIsAuthenticated()) {
                     user.deauthenticate();
+                    setUser(user);
                     setTitle("POSsibility");
                     statusBar.setStatus(statusRB.getString("onlogout"));
                     f_logout.setEnabled(false);
@@ -156,7 +162,7 @@ public class App extends JFrame implements UserListener {
         vpe_all.addActionListener(new ActionListener () {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EmployeesList employees = new EmployeesList(panelRB.getString("all"), "");
+                EmployeeList employees = new EmployeeList(panelRB.getString("all"), "");
                 @SuppressWarnings("static-access")
                 JInternalFrame allEmployees = new JInternalFrame(
                         employees.title,
@@ -187,10 +193,26 @@ public class App extends JFrame implements UserListener {
         vpCreators.add(vpcr_new);
         viewPeople.add(vpCreators);
         
-        vpCustomers = new JMenu(menuRB.getString("view.people.creators"));
-        vpcus_all = new JMenuItem(menuRB.getString("view.people.creators.all"));
+        vpCustomers = new JMenu(menuRB.getString("view.people.customers"));
+        vpcus_all = new JMenuItem(menuRB.getString("view.people.customers.all"));
+        vpcus_all.addActionListener(new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomerList customers = new CustomerList(panelRB.getString("all"), "");
+                @SuppressWarnings("static-access")
+                JInternalFrame allCustomers = new JInternalFrame(
+                        customers.title,
+                        customers.resizable,
+                        customers.maximizable,
+                        customers.iconifiable);
+                allCustomers.setContentPane(customers);
+                allCustomers.pack();
+                allCustomers.setVisible(true);
+                desktop.add(allCustomers);
+            }
+        });
         vpCustomers.add(vpcus_all);
-        vpcus_filter = new JMenuItem(menuRB.getString("view.people.creators.filter"));
+        vpcus_filter = new JMenuItem(menuRB.getString("view.people.customers.filter"));
         vpCustomers.add(vpcus_filter);
         viewPeople.add(vpCustomers);
         viewMenu.add(viewPeople);
@@ -301,6 +323,9 @@ public class App extends JFrame implements UserListener {
                     f_clockout.setEnabled(false);
                 }
             }
+        } else {
+            loginPanel = new Login();
+            loginPanel.setUserListener(this);
         }
     }
 }

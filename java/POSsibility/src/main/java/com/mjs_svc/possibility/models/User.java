@@ -190,7 +190,7 @@ public class User {
      *
      * @param isActive
      */
-    public void setIsActive(boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -206,7 +206,7 @@ public class User {
      *
      * @param isStaff
      */
-    public void setIsStaff(boolean staff) {
+    public void setStaff(boolean staff) {
         this.staff = staff;
     }
 
@@ -222,7 +222,7 @@ public class User {
      *
      * @param isSuperuser
      */
-    public void setIsSuperuser(boolean superuser) {
+    public void setSuperuser(boolean superuser) {
         this.superuser = superuser;
     }
 

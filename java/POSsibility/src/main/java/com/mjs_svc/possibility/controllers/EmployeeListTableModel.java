@@ -11,7 +11,7 @@ import org.hibernate.Session;
  * @author Matthew Scott
  * @version $Id$
  */
-public class EmployeesListTableModel extends AbstractTableModel {
+public class EmployeeListTableModel extends AbstractTableModel {
 
     private ResourceBundle titlesRB = ResourceBundle.getBundle(
             "FieldTitles",
@@ -29,7 +29,7 @@ public class EmployeesListTableModel extends AbstractTableModel {
     
     Object[][] data;
     
-    public EmployeesListTableModel(String hql) {
+    public EmployeeListTableModel(String hql) {
         super();
         Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
         sess.beginTransaction();

@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import com.mjs_svc.possibility.controllers.LoginController;
 import com.mjs_svc.possibility.util.*;
+import java.beans.PropertyVetoException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import org.hibernate.Session;
@@ -81,11 +82,17 @@ public class Login extends JPanel {
     }
 
     public void finish() {
-        //XXX Dispose isn't right.  We need to destroy somewhere
-        ((JInternalFrame) this.getParent() // JLayeredPane
+        JInternalFrame p = ((JInternalFrame) this
+                .getParent() // JLayeredPane
                 .getParent() // JRootPane
-                .getParent())// JInternalFrame
-                .dispose();
+                .getParent()); // JInternalFrame
+
+        try {
+            p.setClosed(true);
+        } catch (PropertyVetoException e) {
+            //
+        }
+        p.dispose();
     }
 
     public void setUserListener(UserListener a) {

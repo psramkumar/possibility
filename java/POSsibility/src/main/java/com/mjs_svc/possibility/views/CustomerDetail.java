@@ -12,19 +12,19 @@ import org.hibernate.Session;
 /**
  *
  * @author Matthew Scott
- * @version $Id$
+ * @version $Id: EmployeeDetail.java 24 2010-04-11 22:22:28Z matthew.joseph.scott $
  */
-public class EmployeeDetail extends JPanel {
+public class CustomerDetail extends JPanel {
     private JLabel lId, lUsername, lFirstName, lLastName, lPosition;
     private JTextField username, firstName, lastName;
     private JSpinner id;
-    private JComboBox position;
-    private AddressDetail address;
+    private AddressDetail[] addresses;
+    private JScrollPane addressPane;
     private JButton create, update, delete;
 
     private Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
-    private Employee employee;
-    private int employeeId;
+    private Customer customer;
+    private int customerId;
     private ResourceBundle rb = ResourceBundle.getBundle("FieldTitles");
 
     public static boolean closable = true;
@@ -33,9 +33,9 @@ public class EmployeeDetail extends JPanel {
     public static boolean iconifiable = true;
 
 
-    public EmployeeDetail(int empId) {
-        employeeId = empId;
-        
+    public CustomerDetail(int empId) {
+        customerId = empId;
+
         lId = new JLabel(rb.getString("employee.id"));
         lUsername = new JLabel(rb.getString("user.username"));
         lFirstName = new JLabel(rb.getString("user.firstname"));
@@ -52,24 +52,24 @@ public class EmployeeDetail extends JPanel {
 
             @Override
             public void stateChanged(ChangeEvent e) {
-                employeeId = (Integer)
+                customerId = (Integer)
                         ((SpinnerListModel)
                         ((JSpinner) e.getSource()).getModel()).getValue();
                 loadData();
             }
         });
-        position = new JComboBox(sess.createQuery("select name from Position").list().toArray());
 
-        address = new AddressDetail(new Address(), false, true, false);
+        addresses = new AddressDetail[] {new AddressDetail(new Address(), false, true, false)};
         sess.getTransaction().commit();
+        addressPane = new JScrollPane(addresses[0]);
 
         create = new JButton(rb.getString("create"));
-        create.setEnabled(UserContainer.getUser().hasPermission("add_employee"));
+        create.setEnabled(UserContainer.getUser().hasPermission("add_customer"));
         update = new JButton(rb.getString("update"));
-        update.setEnabled(UserContainer.getUser().hasPermission("change_employee"));
+        update.setEnabled(UserContainer.getUser().hasPermission("change_customer"));
         delete = new JButton(rb.getString("delete"));
-        delete.setEnabled(UserContainer.getUser().hasPermission("delete_employee"));
-        
+        delete.setEnabled(UserContainer.getUser().hasPermission("delete_customer"));
+
         loadData();
 
         setLayout(new GridBagLayout());
@@ -104,20 +104,15 @@ public class EmployeeDetail extends JPanel {
         add(lastName, fields);
 
         labels.gridy = 4;
-        add(lPosition, labels);
-        fields.gridy = 4;
-        add(position, fields);
-
-        labels.gridy = 5;
         labels.gridwidth = 3;
-        add(address, labels);
+        add(addressPane, labels);
 
         labels.gridwidth = 1;
-        labels.gridy = 6;
+        labels.gridy = 5;
         labels.anchor = GridBagConstraints.LINE_START;
         add(create, labels);
         fields.gridwidth = 1;
-        fields.gridy = 6;
+        fields.gridy = 5;
         add(update, fields);
         fields.gridx = 2;
         add(delete, fields);
@@ -126,21 +121,24 @@ public class EmployeeDetail extends JPanel {
     private void loadData() {
         sess = HibernateUtil.getSessionFactory().getCurrentSession();
         sess.beginTransaction();
-        employee = (Employee) sess.load(Employee.class, employeeId);
+        customer = (Customer) sess.load(Employee.class, customerId);
 
-        username.setText(employee.getUser().getUsername());
-        firstName.setText(employee.getUser().getFirstName());
-        lastName.setText(employee.getUser().getLastName());
+        username.setText(customer.getUser().getUsername());
+        firstName.setText(customer.getUser().getFirstName());
+        lastName.setText(customer.getUser().getLastName());
 
-        for (int i = 0; i < position.getItemCount(); i++) {
-            if (employee.getPosition().getName().equals(position.getItemAt(i))) {
-                position.setSelectedIndex(i);
-                break;
-            }
+        addresses = new AddressDetail[customer.getShippingAddresses().size() + 1];
+        addresses[0] = new AddressDetail(rb.getString("address.billing"), customer.getBillingAddress(), false, true, false);
+        int as = 1;
+        for (Object a : customer.getShippingAddresses()) {
+            addresses[as] = new AddressDetail(rb.getString("address.shipping"), (Address) a, false, true, true);
         }
 
-        address = new AddressDetail(employee.getAddress(), false, true, false);
-        
+        addressPane = new JScrollPane();
+        for (AddressDetail a : addresses) {
+            addressPane.add(a);
+        }
+
         sess.getTransaction().commit();
     }
 
