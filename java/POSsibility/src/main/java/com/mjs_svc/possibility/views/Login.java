@@ -1,18 +1,15 @@
 package com.mjs_svc.possibility.views;
 
-import com.mjs_svc.possibility.App;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import com.mjs_svc.possibility.controllers.LoginController;
 import com.mjs_svc.possibility.util.*;
 import java.beans.PropertyVetoException;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import org.hibernate.Session;
 
 /**
- *
+ * A view with a username and password field to let a user log in.
  * @author Matthew Scott
  * @version $Id$
  */
@@ -21,11 +18,6 @@ public class Login extends JPanel {
     private ResourceBundle panelRB = ResourceBundle.getBundle(
             "PanelTexts",
             Locale.getDefault());
-    public static String title;
-    public static final boolean resizable = false;
-    public static final boolean closable = true;
-    public static final boolean maximizable = false;
-    public static final boolean iconifiable = false;
     private JLabel username_label = new JLabel(panelRB.getString("login.username")),
             password_label = new JLabel(panelRB.getString("login.password")),
             error = new JLabel();
@@ -34,6 +26,15 @@ public class Login extends JPanel {
     private JButton submit = new JButton(panelRB.getString("login"));
     private UserListener a;
 
+    public static String title;
+    public static final boolean resizable = false;
+    public static final boolean closable = true;
+    public static final boolean maximizable = false;
+    public static final boolean iconifiable = false;
+
+    /**
+     * Construct a new login pane
+     */
     public Login() {
         title = panelRB.getString("login");
         setLayout(new GridLayout(0, 2));
@@ -81,6 +82,9 @@ public class Login extends JPanel {
         username.requestFocus();
     }
 
+    /**
+     * Close down the window so that the password and username disappear
+     */
     public void finish() {
         JInternalFrame p = ((JInternalFrame) this
                 .getParent() // JLayeredPane
@@ -95,6 +99,10 @@ public class Login extends JPanel {
         p.dispose();
     }
 
+    /**
+     * Make sure we keep the app up to date with the new user
+     * @param a The app that needs tellin'.
+     */
     public void setUserListener(UserListener a) {
         this.a = a;
     }

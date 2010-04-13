@@ -32,7 +32,10 @@ public class EmployeeDetail extends JPanel {
     public static boolean resizable = false;
     public static boolean iconifiable = true;
 
-
+    /**
+     *
+     * @param empId
+     */
     public EmployeeDetail(int empId) {
         employeeId = empId;
         
@@ -123,6 +126,9 @@ public class EmployeeDetail extends JPanel {
         add(delete, fields);
     }
 
+    /**
+     * 
+     */
     private void loadData() {
         sess = HibernateUtil.getSessionFactory().getCurrentSession();
         sess.beginTransaction();

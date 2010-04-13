@@ -31,12 +31,12 @@ public class CustomerListTableModel extends AbstractTableModel {
         sess.beginTransaction();
         Vector<Object[]> customers = new Vector<Object[]>();
         for (Object cus : sess.createQuery("from Customer" + hql).list()) {
-            Customer e = (Customer) cus;
+            Customer c = (Customer) cus;
             customers.add(new Object[] {
-                e.getId(),
-                e.getUser().getUsername(),
-                e.getUser().getFirstName(),
-                e.getUser().getLastName()
+                c.getId(),
+                c.getUser().getUsername(),
+                c.getUser().getFirstName(),
+                c.getUser().getLastName()
             });
         }
         sess.getTransaction().commit();

@@ -50,11 +50,11 @@ public class AddressDetail extends JPanel {
         zipCode = new JTextField(address.getZipCode());
         country = new JTextField(address.getCountry());
 
-        create = new JButton("XXXcreate");
+        create = new JButton(rb.getString("create"));
         create.setEnabled(enableCreate);
-        update = new JButton("XXXupdate");
+        update = new JButton(rb.getString("update"));
         update.setEnabled(enableUpdate);
-        delete = new JButton("XXXdelete");
+        delete = new JButton(rb.getString("delete"));
         delete.setEnabled(enableDelete);
 
         setBorder(BorderFactory.createTitledBorder(rb.getString("address")

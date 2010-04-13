@@ -4,7 +4,6 @@ import com.mjs_svc.possibility.util.HibernateUtil;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.security.MessageDigest;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 /**
@@ -22,154 +21,78 @@ public class User {
     private Employee employee;
     private Set permissions = new HashSet(), groups = new HashSet();
 
-    /**
-     *
-     * @return
-     */
     public Set getGroups() {
         return groups;
     }
 
-    /**
-     * 
-     * @param groups
-     */
     public void setGroups(Set groups) {
         this.groups = groups;
     }
 
-    /**
-     *
-     * @return
-     */
     public Set getPermissions() {
         return permissions;
     }
 
-    /**
-     *
-     * @param permissions
-     */
     public void setPermissions(Set permissions) {
         this.permissions = permissions;
     }
 
-    /**
-     *
-     * @return
-     */
     public Creator getCreator() {
         return creator;
     }
 
-    /**
-     * 
-     * @param creator
-     */
     public void setCreator(Creator creator) {
         this.creator = creator;
     }
 
-    /**
-     * 
-     * @return
-     */
     public Customer getCustomer() {
         return customer;
     }
 
-    /**
-     * 
-     * @param customer
-     */
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    /**
-     * 
-     * @return
-     */
     public Employee getEmployee() {
         return employee;
     }
 
-    /**
-     * 
-     * @param employee
-     */
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
 
-    /**
-     *
-     * @return
-     */
     public Date getDateJoined() {
         return dateJoined;
     }
 
-    /**
-     *
-     * @param dateJoined
-     */
     public void setDateJoined(Date dateJoined) {
         this.dateJoined = dateJoined;
     }
 
-    /**
-     *
-     * @return
-     */
     public Date getLastLogin() {
         return lastLogin;
     }
 
-    /**
-     *
-     * @param lastLogin
-     */
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getEmail() {
         return email;
     }
 
-    /**
-     *
-     * @param email
-     */
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getFirstName() {
         return firstName;
     }
 
-    /**
-     *
-     * @param firstName
-     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    /**
-     *
-     * @return
-     */
     public long getId() {
         return id;
     }
@@ -178,98 +101,50 @@ public class User {
         this.id = id;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isActive() {
         return active;
     }
 
-    /**
-     *
-     * @param isActive
-     */
     public void setActive(boolean active) {
         this.active = active;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isStaff() {
         return staff;
     }
 
-    /**
-     *
-     * @param isStaff
-     */
     public void setStaff(boolean staff) {
         this.staff = staff;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isSuperuser() {
         return superuser;
     }
 
-    /**
-     *
-     * @param isSuperuser
-     */
     public void setSuperuser(boolean superuser) {
         this.superuser = superuser;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getLastName() {
         return lastName;
     }
 
-    /**
-     *
-     * @param lastName
-     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getPassword() {
         return password;
     }
 
-    /**
-     *
-     * @param password
-     */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getUsername() {
         return username;
     }
 
-    /**
-     *
-     * @param username
-     */
     public void setUsername(String username) {
         this.username = username;
     }
@@ -369,18 +244,32 @@ public class User {
      * @return True if the user or the user's groups have that permission, false otherwise
      */
     public boolean hasPermission(String perm) {
+        // Superusers have all permissions
         if (isSuperuser()) {
             return true;
         }
+
+        // Unauthenticated users (hibernate guesses id = 0) have no permissions
+        if (id == 0) {
+            return false;
+        }
+
+        // Otherwise, really go out and check our permissions.
         Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
         sess.beginTransaction();
+
+        // Use a current instance of our user
         User u = (User) sess.load(User.class, getId());
+
+        // Check user permissions
         for (Object p : u.getPermissions()) {
             if (((Permission) p).getCodeName().equals(perm)) {
                 sess.getTransaction().commit();
                 return true;
             }
         }
+
+        // Check group permissions
         for (Object g : u.getGroups()) {
             for (Object p : ((Group) g).getPermissions()) {
                 if (((Permission) p).getCodeName().equals(perm)) {
@@ -389,6 +278,8 @@ public class User {
                 }
             }
         }
+
+        // None found
         sess.getTransaction().commit();
         return false;
     }

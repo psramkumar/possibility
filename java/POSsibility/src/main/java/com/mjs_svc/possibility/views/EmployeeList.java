@@ -41,11 +41,11 @@ public class EmployeeList extends JPanel {
                 JInternalFrame empDetail = new JInternalFrame(
                         rb.getString("employee") + ": "
                             + t.getValueAt(t.getSelectedRow(), 1),
-                        CustomerDetail.resizable,
-                        CustomerDetail.closable,
-                        CustomerDetail.maximizable,
-                        CustomerDetail.iconifiable);
-                empDetail.setContentPane(new CustomerDetail((Integer) t.getValueAt(t.getSelectedRow(), 0)));
+                        EmployeeDetail.resizable,
+                        EmployeeDetail.closable,
+                        EmployeeDetail.maximizable,
+                        EmployeeDetail.iconifiable);
+                empDetail.setContentPane(new EmployeeDetail((Integer) t.getValueAt(t.getSelectedRow(), 0)));
                 empDetail.pack();
                 empDetail.setVisible(true);
                 t.getParent()

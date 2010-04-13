@@ -23,7 +23,7 @@ public class CustomerList extends JPanel {
     public static final boolean closable = true;
     public static final boolean maximizable = true;
     public static final boolean iconifiable = true;
-    private JTable employeeTable;
+    private JTable customerTable;
     private JScrollPane scrollPane;
 
     public CustomerList(String subTitle, String hql) {
@@ -31,9 +31,9 @@ public class CustomerList extends JPanel {
         title = rb.getString("customer.plural") + " - " + subTitle + hql;
         setLayout(new BorderLayout());
 
-        employeeTable = new JTable(new CustomerListTableModel(hql));
-        employeeTable.setAutoCreateRowSorter(true);
-        employeeTable.addMouseListener(new MouseAdapter() {
+        customerTable = new JTable(new CustomerListTableModel(hql));
+        customerTable.setAutoCreateRowSorter(true);
+        customerTable.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -62,7 +62,7 @@ public class CustomerList extends JPanel {
                 }
             }
         });
-        scrollPane = new JScrollPane(employeeTable);
+        scrollPane = new JScrollPane(customerTable);
         add(scrollPane, BorderLayout.CENTER);
     }
 }

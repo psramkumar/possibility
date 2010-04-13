@@ -15,7 +15,7 @@ import org.hibernate.Session;
  * @version $Id: EmployeeDetail.java 24 2010-04-11 22:22:28Z matthew.joseph.scott $
  */
 public class CustomerDetail extends JPanel {
-    private JLabel lId, lUsername, lFirstName, lLastName, lPosition;
+    private JLabel lId, lUsername, lFirstName, lLastName;
     private JTextField username, firstName, lastName;
     private JSpinner id;
     private AddressDetail[] addresses;
@@ -36,18 +36,17 @@ public class CustomerDetail extends JPanel {
     public CustomerDetail(int empId) {
         customerId = empId;
 
-        lId = new JLabel(rb.getString("employee.id"));
+        lId = new JLabel(rb.getString("customer.id"));
         lUsername = new JLabel(rb.getString("user.username"));
         lFirstName = new JLabel(rb.getString("user.firstname"));
         lLastName = new JLabel(rb.getString("user.familyname"));
-        lPosition = new JLabel(rb.getString("employee.position"));
 
         username = new JTextField();
         firstName = new JTextField();
         lastName = new JTextField();
 
         sess.beginTransaction();
-        id = new JSpinner(new SpinnerListModel(sess.createQuery("select id from Employee").list()));
+        id = new JSpinner(new SpinnerListModel(sess.createQuery("select id from Customer").list()));
         id.addChangeListener(new ChangeListener() {
 
             @Override

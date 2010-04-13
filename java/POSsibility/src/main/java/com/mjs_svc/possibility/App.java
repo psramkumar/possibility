@@ -55,6 +55,7 @@ public class App extends JFrame implements UserListener {
     public App() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         StatusContainer.setStatusBar(statusBar);
+        UserContainer.setUser(new User());
         loginPanel.setUserListener(this);
         timeClock.setUserListener(this);
         initComponents();
