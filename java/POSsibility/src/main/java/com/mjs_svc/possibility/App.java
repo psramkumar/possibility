@@ -4,6 +4,7 @@ import com.mjs_svc.possibility.util.*;
 import com.mjs_svc.possibility.views.*;
 import com.mjs_svc.possibility.controllers.*;
 import com.mjs_svc.possibility.models.*;
+import java.awt.Color;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -49,16 +50,28 @@ public class App extends JFrame implements UserListener {
             Locale.getDefault());
 
     public static void main( String[] args ) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Throwable e) {
+            //
+        }
         new App().setVisible(true);
     }
 
     public App() {
+        SplashScreen splash = new SplashScreen();
+        splash.updateProgress(1, statusRB.getString("splash.hibernate"));
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        splash.updateProgress(2, statusRB.getString("splash.containers"));
         StatusContainer.setStatusBar(statusBar);
         UserContainer.setUser(new User());
         loginPanel.setUserListener(this);
         timeClock.setUserListener(this);
+        splash.updateProgress(3, statusRB.getString("splash.components"));
         initComponents();
+        splash.updateProgress(4, statusRB.getString("splash.finished"));
+        splash.setVisible(false);
+        splash.dispose();
     }
 
     private void exitMenuItemActionPerformed(ActionEvent evt) {
@@ -67,6 +80,8 @@ public class App extends JFrame implements UserListener {
 
     private void initComponents() {
         desktop = new JDesktopPane();
+        desktop.setBackground(Color.WHITE);
+
         menuBar = new JMenuBar();
 
         fileMenu = new JMenu(menuRB.getString("file"));

@@ -21,13 +21,15 @@ public class AddressDetail extends JPanel {
     private ResourceBundle rb = ResourceBundle.getBundle(
             "FieldTitles", Locale.getDefault());
 
-    public AddressDetail(String title, Address a, boolean enableCreate, boolean enableUpdate, boolean enableDelete) {
+    public AddressDetail(String title, Address a, boolean enableCreate,
+            boolean enableUpdate, boolean enableDelete) {
         new AddressDetail(a, enableCreate, enableUpdate, enableDelete);
         setBorder(BorderFactory.createTitledBorder(rb.getString("address")
                 + " - " + address.getId() + ": " + title));
     }
 
-    public AddressDetail(Address a, boolean enableCreate, boolean enableUpdate, boolean enableDelete) {
+    public AddressDetail(Address a, boolean enableCreate, boolean enableUpdate,
+            boolean enableDelete) {
         address = a;
 
         lAddress1 = new JLabel(rb.getString("address.address1"));

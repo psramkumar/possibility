@@ -180,10 +180,14 @@ public class User {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public String generateNewPasswordHash(String plaintext) throws NoSuchAlgorithmException {
+    public String generateNewPasswordHash(String plaintext) {
         StringBuffer pwhash = new StringBuffer("sha1$");
         Random r = new Random();
-        md = MessageDigest.getInstance("SHA-1");
+        try {
+            md = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e) {
+            //
+        }
         byte[] salt = new byte[5];
 
         // Generate a new salt

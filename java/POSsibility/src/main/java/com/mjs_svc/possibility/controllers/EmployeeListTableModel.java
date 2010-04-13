@@ -1,6 +1,6 @@
 package com.mjs_svc.possibility.controllers;
 
-import com.mjs_svc.possibility.models.Employee;
+import com.mjs_svc.possibility.models.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
 import com.mjs_svc.possibility.util.HibernateUtil;
@@ -21,6 +21,7 @@ public class EmployeeListTableModel extends AbstractTableModel {
         titlesRB.getString("user.username"),
         titlesRB.getString("user.firstname"),
         titlesRB.getString("user.familyname"),
+        titlesRB.getString("user.email"),
         titlesRB.getString("employee.position"),
         titlesRB.getString("employee.address"),
         titlesRB.getString("employee.isclockedin"),
@@ -41,8 +42,9 @@ public class EmployeeListTableModel extends AbstractTableModel {
                 e.getUser().getUsername(),
                 e.getUser().getFirstName(),
                 e.getUser().getLastName(),
+                e.getUser().getEmail(),
                 e.getPosition().getName(),
-                e.getAddress().getId(), //XXX set tooltiptext later
+                e.getAddress() instanceof Address, //XXX set tooltiptext later
                 e.getIsClockedIn(),
                 e.getTroubleTickets().size()
             });
