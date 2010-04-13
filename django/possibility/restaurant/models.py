@@ -23,7 +23,7 @@ class Table(models.Model):
             (1, "Oval"),
             )
 
-    name = models.CharField(max_length = 50, blank = true)
+    name = models.CharField(max_length = 50, blank = True)
     seats = models.IntegerField()
     area = models.ForeignKey('TableArea')
     group = models.ForeignKey('TableGroup', blank = True, null = True)

@@ -37,7 +37,7 @@ class Position(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User)
     position = models.ForeignKey('Position')
-    address = models.ForeignKey('Address')
+    address = models.ForeignKey('Address', null = True, blank = True)
 
 class TimeClockEvent(models.Model):
     user = models.ForeignKey('Employee')
