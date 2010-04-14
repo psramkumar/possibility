@@ -4,10 +4,12 @@ import com.mjs_svc.possibility.util.*;
 import com.mjs_svc.possibility.views.*;
 import com.mjs_svc.possibility.controllers.*;
 import com.mjs_svc.possibility.models.*;
+
 import java.awt.Color;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
+
 import java.beans.PropertyVetoException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -19,7 +21,10 @@ import org.hibernate.Session;
  * @version $Id$
  */
 public class App extends JFrame implements UserListener {
+    //
     private User user;
+
+    //
     private JMenuBar menuBar;
     private JMenu fileMenu, editMenu, viewMenu, toolsMenu, helpMenu,
             viewPeople, vpEmployees, vpCustomers, vpCreators,
@@ -36,9 +41,13 @@ public class App extends JFrame implements UserListener {
             vtt_filter, vtt_new,                    //troubletickets
             t_changePass;                           //tools
     private JDesktopPane desktop;
+
+    //
     private Login loginPanel = new Login(); // needed for setting user listener
     private TimeClockController timeClock = new TimeClockController();
     private StatusBar statusBar = new StatusBar();
+
+    //
     private ResourceBundle menuRB = ResourceBundle.getBundle(
             "MenuTexts",
             Locale.getDefault()),
@@ -49,6 +58,10 @@ public class App extends JFrame implements UserListener {
             "PanelTexts",
             Locale.getDefault());
 
+    /**
+     *
+     * @param args
+     */
     public static void main( String[] args ) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -58,6 +71,9 @@ public class App extends JFrame implements UserListener {
         new App().setVisible(true);
     }
 
+    /**
+     *
+     */
     public App() {
         SplashScreen splash = new SplashScreen();
         splash.updateProgress(1, statusRB.getString("splash.hibernate"));
@@ -74,16 +90,16 @@ public class App extends JFrame implements UserListener {
         splash.dispose();
     }
 
-    private void exitMenuItemActionPerformed(ActionEvent evt) {
-        System.exit(0);
-    }
-
+    /**
+     *
+     */
     private void initComponents() {
         desktop = new JDesktopPane();
         desktop.setBackground(Color.WHITE);
 
         menuBar = new JMenuBar();
 
+        //
         fileMenu = new JMenu(menuRB.getString("file"));
         f_login = new JMenuItem(menuRB.getString("file.login"));
         f_login.addActionListener(new ActionListener() {
@@ -154,6 +170,16 @@ public class App extends JFrame implements UserListener {
         f_clockout.setEnabled(false);
         fileMenu.add(f_clockout);
         f_settings = new JMenuItem(menuRB.getString("file.settings"));
+        f_settings.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame settings = new JInternalFrame();
+                settings.setContentPane(new Settings());
+                settings.pack();
+                settings.setVisible(true);
+                desktop.add(settings);
+            }
+        });
         fileMenu.add(f_settings);
         fileMenu.addSeparator();
         f_exit = new JMenuItem(menuRB.getString("file.exit"));
@@ -168,9 +194,11 @@ public class App extends JFrame implements UserListener {
         fileMenu.add(f_exit);
         menuBar.add(fileMenu);
 
+        //
         editMenu = new JMenu(menuRB.getString("edit"));
         menuBar.add(editMenu);
 
+        //
         viewMenu = new JMenu(menuRB.getString("view"));
         viewPeople = new JMenu(menuRB.getString("view.people"));
         vpEmployees = new JMenu(menuRB.getString("view.people.employees"));
@@ -199,6 +227,7 @@ public class App extends JFrame implements UserListener {
         vpEmployees.add(vpe_new);
         viewPeople.add(vpEmployees);
 
+        //
         vpCreators = new JMenu(menuRB.getString("view.people.creators"));
         vpcr_all = new JMenuItem(menuRB.getString("view.people.creators.all"));
         vpCreators.add(vpcr_all);
@@ -208,7 +237,8 @@ public class App extends JFrame implements UserListener {
         vpcr_new = new JMenuItem(menuRB.getString("view.people.creators.new"));
         vpCreators.add(vpcr_new);
         viewPeople.add(vpCreators);
-        
+
+        //
         vpCustomers = new JMenu(menuRB.getString("view.people.customers"));
         vpcus_all = new JMenuItem(menuRB.getString("view.people.customers.all"));
         vpcus_all.addActionListener(new ActionListener () {
@@ -233,6 +263,7 @@ public class App extends JFrame implements UserListener {
         viewPeople.add(vpCustomers);
         viewMenu.add(viewPeople);
 
+        //
         viewProducts = new JMenu(menuRB.getString("view.products"));
         vpr_all = new JMenuItem(menuRB.getString("view.products.all"));
         viewProducts.add(vpr_all);
@@ -243,6 +274,7 @@ public class App extends JFrame implements UserListener {
         viewProducts.add(vpr_new);
         viewMenu.add(viewProducts);
 
+        //
         viewOrders = new JMenu(menuRB.getString("view.orders"));
         vo_all = new JMenuItem(menuRB.getString("view.orders.all"));
         viewOrders.add(vo_all);
@@ -253,6 +285,7 @@ public class App extends JFrame implements UserListener {
         viewOrders.add(vo_new);
         viewMenu.add(viewOrders);
 
+        //
         viewTransactions = new JMenu(menuRB.getString("view.transactions"));
         vtr_all = new JMenuItem(menuRB.getString("view.transactions.all"));
         viewTransactions.add(vtr_all);
@@ -262,6 +295,7 @@ public class App extends JFrame implements UserListener {
         vtr_new = new JMenuItem(menuRB.getString("view.transactions.new"));
         viewMenu.add(viewTransactions);
 
+        //
         viewTroubleTickets = new JMenu(menuRB.getString("view.troubletickets"));
         vtt_all = new JMenuItem(menuRB.getString("view.troubletickets.all"));
         viewTroubleTickets.add(vtt_all);
@@ -276,17 +310,21 @@ public class App extends JFrame implements UserListener {
         viewTroubleTickets.add(vtt_new);
         viewMenu.add(viewTroubleTickets);
 
+        //
         menuBar.add(viewMenu);
 
+        //
         toolsMenu = new JMenu(menuRB.getString("tools"));
         t_changePass = new JMenuItem(menuRB.getString("tools.changepassword"));
         toolsMenu.add(t_changePass);
         menuBar.add(toolsMenu);
 
+        //
         helpMenu = new JMenu(menuRB.getString("help"));
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
 
+        //
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -301,8 +339,10 @@ public class App extends JFrame implements UserListener {
             }
         });
 
+        //
         statusBar.setStatus(statusRB.getString("welcome"));
 
+        //
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -316,11 +356,17 @@ public class App extends JFrame implements UserListener {
             .addComponent(statusBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
 
+        //
         setTitle("POSsibility");
 
+        //
         pack();
     }
 
+    /**
+     *
+     * @param _user
+     */
     @Override
     public void setUser(User _user) {
         user = _user;
