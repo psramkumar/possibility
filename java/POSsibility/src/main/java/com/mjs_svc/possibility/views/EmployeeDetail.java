@@ -88,18 +88,54 @@ public class EmployeeDetail extends JPanel {
                             (Position) sess.createQuery("from Position where name = :n")
                             .setParameter("n", (String) position.getSelectedItem())
                             .uniqueResult());
-                    //sess.getTransaction().commit();
+                    //sess.getTransaction().commit(); // createEmployee calls this
                 } catch (PermissionDeniedException exc) {
                     // do somethign
                 } finally {
                     loadData();
+                    PingPublisher.ping();
                 }
             }
         });
         update = new JButton(rb.getString("update"));
         update.setEnabled(UserContainer.getUser().hasPermission("change_employee"));
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    sess = HibernateUtil.getSessionFactory().getCurrentSession();
+                    sess.beginTransaction();
+                    employee = EmployeeDetailController.updateEmployee(
+                            employee.getId(),
+                            username.getText(),
+                            firstName.getText(),
+                            lastName.getText(),
+                            email.getText(),
+                            (Position) sess.createQuery("from Position where name = :n")
+                            .setParameter("n", (String) position.getSelectedItem())
+                            .uniqueResult());
+                    //sess.getTransaction().commit(); // createEmployee calls this
+                } catch (PermissionDeniedException exc) {
+                    // do somethign
+                } finally {
+                    loadData();
+                    PingPublisher.ping();
+                }
+            }
+        });
         delete = new JButton(rb.getString("delete"));
         delete.setEnabled(UserContainer.getUser().hasPermission("delete_employee"));
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmployeeDetailController.deleteEmployee(employee.getId());
+                if (id.getModel().getNextValue() != null) {
+                    id.getModel().setValue(id.getModel().getNextValue());
+                } else if (id.getModel().getPreviousValue() != null) {
+                    id.getModel().setValue(id.getModel().getNextValue());
+                }
+            }
+        });
         
         loadData();
 

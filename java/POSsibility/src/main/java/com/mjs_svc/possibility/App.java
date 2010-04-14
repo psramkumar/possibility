@@ -21,10 +21,10 @@ import org.hibernate.Session;
  * @version $Id$
  */
 public class App extends JFrame implements UserListener {
-    //
+    // A user object to be used for keeping track of a logged-in user
     private User user;
 
-    //
+    // GUI objects
     private JMenuBar menuBar;
     private JMenu fileMenu, editMenu, viewMenu, toolsMenu, helpMenu,
             viewPeople, vpEmployees, vpCustomers, vpCreators,
@@ -42,12 +42,12 @@ public class App extends JFrame implements UserListener {
             t_changePass;                           //tools
     private JDesktopPane desktop;
 
-    //
+    // Some panel stuff for User and Status listeners/containers
     private Login loginPanel = new Login(); // needed for setting user listener
     private TimeClockController timeClock = new TimeClockController();
     private StatusBar statusBar = new StatusBar();
 
-    //
+    // Resource bundles for i18n
     private ResourceBundle menuRB = ResourceBundle.getBundle(
             "MenuTexts",
             Locale.getDefault()),
@@ -59,39 +59,47 @@ public class App extends JFrame implements UserListener {
             Locale.getDefault());
 
     /**
-     *
-     * @param args
+     * Set up the app with the system L&F
+     * @param args Command line args (none defined)
      */
     public static void main( String[] args ) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Throwable e) {
-            //
+            // Ignore the exception and live with Metal
         }
         new App().setVisible(true);
     }
 
     /**
-     *
+     * Construct a new App with a splash screen, all done in methods
      */
     public App() {
         SplashScreen splash = new SplashScreen();
+
+        // Call getCurrentSession() to start a session
         splash.updateProgress(1, statusRB.getString("splash.hibernate"));
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        // Set up containers
         splash.updateProgress(2, statusRB.getString("splash.containers"));
         StatusContainer.setStatusBar(statusBar);
         UserContainer.setUser(new User());
         loginPanel.setUserListener(this);
         timeClock.setUserListener(this);
+
+        // Set up components
         splash.updateProgress(3, statusRB.getString("splash.components"));
         initComponents();
+
+        // This shouldn't really ever be seen :3
         splash.updateProgress(4, statusRB.getString("splash.finished"));
         splash.setVisible(false);
         splash.dispose();
     }
 
     /**
-     *
+     * Build all components and add to the frame
      */
     private void initComponents() {
         desktop = new JDesktopPane();
@@ -99,7 +107,7 @@ public class App extends JFrame implements UserListener {
 
         menuBar = new JMenuBar();
 
-        //
+        // Set up file menus
         fileMenu = new JMenu(menuRB.getString("file"));
         f_login = new JMenuItem(menuRB.getString("file.login"));
         f_login.addActionListener(new ActionListener() {
@@ -194,13 +202,15 @@ public class App extends JFrame implements UserListener {
         fileMenu.add(f_exit);
         menuBar.add(fileMenu);
 
-        //
+        // Set up edit menus
         editMenu = new JMenu(menuRB.getString("edit"));
         menuBar.add(editMenu);
 
-        //
+        // Set up view menus
         viewMenu = new JMenu(menuRB.getString("view"));
         viewPeople = new JMenu(menuRB.getString("view.people"));
+
+        // Set up view.people.employee menus
         vpEmployees = new JMenu(menuRB.getString("view.people.employees"));
         vpe_all = new JMenuItem(menuRB.getString("view.people.employees.all"));
         vpe_all.addActionListener(new ActionListener () {
@@ -227,7 +237,7 @@ public class App extends JFrame implements UserListener {
         vpEmployees.add(vpe_new);
         viewPeople.add(vpEmployees);
 
-        //
+        // Set up view.people.creator menus
         vpCreators = new JMenu(menuRB.getString("view.people.creators"));
         vpcr_all = new JMenuItem(menuRB.getString("view.people.creators.all"));
         vpCreators.add(vpcr_all);
@@ -238,7 +248,7 @@ public class App extends JFrame implements UserListener {
         vpCreators.add(vpcr_new);
         viewPeople.add(vpCreators);
 
-        //
+        // Set up view.people.customer menus
         vpCustomers = new JMenu(menuRB.getString("view.people.customers"));
         vpcus_all = new JMenuItem(menuRB.getString("view.people.customers.all"));
         vpcus_all.addActionListener(new ActionListener () {
@@ -263,7 +273,7 @@ public class App extends JFrame implements UserListener {
         viewPeople.add(vpCustomers);
         viewMenu.add(viewPeople);
 
-        //
+        // Set up view.products menus
         viewProducts = new JMenu(menuRB.getString("view.products"));
         vpr_all = new JMenuItem(menuRB.getString("view.products.all"));
         viewProducts.add(vpr_all);
@@ -274,7 +284,7 @@ public class App extends JFrame implements UserListener {
         viewProducts.add(vpr_new);
         viewMenu.add(viewProducts);
 
-        //
+        // Set up view.orders menus
         viewOrders = new JMenu(menuRB.getString("view.orders"));
         vo_all = new JMenuItem(menuRB.getString("view.orders.all"));
         viewOrders.add(vo_all);
@@ -285,7 +295,7 @@ public class App extends JFrame implements UserListener {
         viewOrders.add(vo_new);
         viewMenu.add(viewOrders);
 
-        //
+        // Set up view.transactions menus
         viewTransactions = new JMenu(menuRB.getString("view.transactions"));
         vtr_all = new JMenuItem(menuRB.getString("view.transactions.all"));
         viewTransactions.add(vtr_all);
@@ -295,7 +305,7 @@ public class App extends JFrame implements UserListener {
         vtr_new = new JMenuItem(menuRB.getString("view.transactions.new"));
         viewMenu.add(viewTransactions);
 
-        //
+        // Set up view.troubletickets menus
         viewTroubleTickets = new JMenu(menuRB.getString("view.troubletickets"));
         vtt_all = new JMenuItem(menuRB.getString("view.troubletickets.all"));
         viewTroubleTickets.add(vtt_all);
@@ -310,21 +320,22 @@ public class App extends JFrame implements UserListener {
         viewTroubleTickets.add(vtt_new);
         viewMenu.add(viewTroubleTickets);
 
-        //
+        // Add view menu
         menuBar.add(viewMenu);
 
-        //
+        // Set up tools menu
         toolsMenu = new JMenu(menuRB.getString("tools"));
         t_changePass = new JMenuItem(menuRB.getString("tools.changepassword"));
         toolsMenu.add(t_changePass);
         menuBar.add(toolsMenu);
 
-        //
+        // Set up help menu
         helpMenu = new JMenu(menuRB.getString("help"));
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
 
-        //
+        // Set up default close operation to make sure hibernate session is
+        // closed
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -339,10 +350,10 @@ public class App extends JFrame implements UserListener {
             }
         });
 
-        //
+        // Set the welcome message on the status bar
         statusBar.setStatus(statusRB.getString("welcome"));
 
-        //
+        // Lay out the components
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,15 +367,15 @@ public class App extends JFrame implements UserListener {
             .addComponent(statusBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
 
-        //
+        // Set the title
         setTitle("POSsibility");
 
-        //
+        // Pack!
         pack();
     }
 
     /**
-     *
+     * Implement setUser - allows us to change the title and status bars
      * @param _user
      */
     @Override

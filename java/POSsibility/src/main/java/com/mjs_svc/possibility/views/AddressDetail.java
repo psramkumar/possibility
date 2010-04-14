@@ -1,6 +1,8 @@
 package com.mjs_svc.possibility.views;
 
+import com.mjs_svc.possibility.controllers.AddressDetailController;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import com.mjs_svc.possibility.models.Address;
@@ -42,19 +44,38 @@ public class AddressDetail extends JPanel {
         lZipCode = new JLabel(rb.getString("address.zipcode"));
         lCountry = new JLabel(rb.getString("address.country"));
 
-        address1 = new JTextField(address.getAddress1());
-        address2 = new JTextField(address.getAddress2());
-        name = new JTextField(address.getName());
-        organization = new JTextField(address.getOrganization());
-        phone = new JTextField(address.getPhone());
-        city = new JTextField(address.getCity());
-        state = new JTextField(address.getState());
-        zipCode = new JTextField(address.getZipCode());
-        country = new JTextField(address.getCountry());
+        address1 = new JTextField();
+        address2 = new JTextField();
+        name = new JTextField();
+        organization = new JTextField();
+        phone = new JTextField();
+        city = new JTextField();
+        state = new JTextField();
+        zipCode = new JTextField();
+        country = new JTextField();
+
+        loadData();
 
         create = new JButton(rb.getString("create"));
         create.setEnabled(enableCreate);
         update = new JButton(rb.getString("update"));
+        update.addActionListener(new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                address = AddressDetailController.updateAddress(
+                        address.getId(),
+                        name.getText(),
+                        organization.getText(),
+                        phone.getText(),
+                        address1.getText(),
+                        address2.getText(),
+                        city.getText(),
+                        state.getText(),
+                        zipCode.getText(),
+                        country.getText());
+                loadData();
+            }
+        });
         update.setEnabled(enableUpdate);
         delete = new JButton(rb.getString("delete"));
         delete.setEnabled(enableDelete);
@@ -86,42 +107,59 @@ public class AddressDetail extends JPanel {
         add(organization, fields);
 
         labels.gridy = 2;
-        add(lAddress1, labels);
+        add(lPhone, labels);
         fields.gridy = 2;
-        add(address1, fields);
+        add(phone, fields);
 
         labels.gridy = 3;
-        add(lAddress2, labels);
+        add(lAddress1, labels);
         fields.gridy = 3;
-        add(address2, fields);
+        add(address1, fields);
 
         labels.gridy = 4;
-        add(lCity, labels);
+        add(lAddress2, labels);
         fields.gridy = 4;
-        add(city, fields);
+        add(address2, fields);
 
         labels.gridy = 5;
-        add(lState, labels);
+        add(lCity, labels);
         fields.gridy = 5;
-        add(state, fields);
+        add(city, fields);
 
         labels.gridy = 6;
-        add(lZipCode, labels);
+        add(lState, labels);
         fields.gridy = 6;
-        add(zipCode, fields);
+        add(state, fields);
 
         labels.gridy = 7;
-        add(lCountry, labels);
+        add(lZipCode, labels);
         fields.gridy = 7;
+        add(zipCode, fields);
+
+        labels.gridy = 8;
+        add(lCountry, labels);
+        fields.gridy = 8;
         add(country, fields);
 
         labels.anchor = GridBagConstraints.LINE_START;
-        labels.gridy = 8;
+        labels.gridy = 9;
         add(create, labels);
         fields.gridwidth = 1;
-        fields.gridy = 8;
+        fields.gridy = 9;
         add(update, fields);
         fields.gridx = 2;
         add(delete, fields);
+    }
+
+    private void loadData() {
+        address1.setText(address.getAddress1());
+        address2.setText(address.getAddress2());
+        name.setText(address.getName());
+        organization.setText(address.getOrganization());
+        phone.setText(address.getPhone());
+        city.setText(address.getCity());
+        state.setText(address.getState());
+        zipCode.setText(address.getZipCode());
+        country.setText(address.getCountry());
     }
 }

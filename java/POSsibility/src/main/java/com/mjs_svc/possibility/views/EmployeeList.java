@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import com.mjs_svc.possibility.controllers.EmployeeListTableModel;
+import com.mjs_svc.possibility.util.*;
 import java.awt.event.MouseAdapter;
 import java.beans.PropertyVetoException;
 
@@ -13,7 +14,7 @@ import java.beans.PropertyVetoException;
  * @author Matthew Scott
  * @version $Id$
  */
-public class EmployeeList extends JPanel {
+public class EmployeeList extends JPanel  implements PingSubscriber {
 
     private ResourceBundle rb = ResourceBundle.getBundle(
             "FieldTitles",
@@ -25,13 +26,16 @@ public class EmployeeList extends JPanel {
     public static final boolean iconifiable = true;
     private JTable employeeTable;
     private JScrollPane scrollPane;
+    private String query;
 
     public EmployeeList(String subTitle, String hql) {
         super();
-        title = rb.getString("employee.plural") + " - " + subTitle + hql;
+        query = hql;
+        title = rb.getString("employee.plural") + " - " + subTitle + query;
         setLayout(new BorderLayout());
+        PingPublisher.add(this);
 
-        employeeTable = new JTable(new EmployeeListTableModel(hql));
+        employeeTable = new JTable(new EmployeeListTableModel(query));
         employeeTable.setAutoCreateRowSorter(true);
         employeeTable.addMouseListener(new MouseAdapter() {
 
@@ -64,5 +68,9 @@ public class EmployeeList extends JPanel {
         });
         scrollPane = new JScrollPane(employeeTable);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void onPing() {
+        employeeTable.setModel(new EmployeeListTableModel(query));
     }
 }

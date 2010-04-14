@@ -100,4 +100,14 @@ public class EmployeeDetailController {
         // Return updated employee
         return emp;
     }
+
+    public static void deleteEmployee(int id) {
+        Session sess = HibernateUtil.getSessionFactory().getCurrentSession();
+        sess.beginTransaction();
+
+        Employee emp = (Employee) sess.load(Employee.class, id);
+        sess.delete(emp);
+
+        sess.getTransaction().commit();
+    }
 }
