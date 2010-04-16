@@ -37,6 +37,8 @@ public class EmployeeList extends JPanel  implements PingSubscriber {
 
         employeeTable = new JTable(new EmployeeListTableModel(query));
         employeeTable.setAutoCreateRowSorter(true);
+        employeeTable.getTableHeader().setReorderingAllowed(false); // don't need this
+        employeeTable.doLayout();
         employeeTable.addMouseListener(new MouseAdapter() {
 
             @Override

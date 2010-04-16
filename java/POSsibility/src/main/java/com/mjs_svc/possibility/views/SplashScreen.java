@@ -1,5 +1,6 @@
 package com.mjs_svc.possibility.views;
 
+import java.awt.*;
 import javax.swing.*;
 
 /**
@@ -9,14 +10,27 @@ import javax.swing.*;
  */
 public class SplashScreen extends JFrame {
     private JProgressBar progress;
+    private JLabel logo;
+    private JLabel text;
 
     public SplashScreen() {
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
+
+        logo = new JLabel(new ImageIcon(getClass().getResource("/possibility-logo.png")));
+        add(logo, BorderLayout.NORTH);
+
+        text = new JLabel("Version: Dev Snapshot; By MJS Services http://mjs-svc.com");
+        add(text);
+
         progress = new JProgressBar(0, 4);
         progress.setStringPainted(true);
-        add(progress);
+        add(progress, BorderLayout.SOUTH);
+
+        setPreferredSize(new Dimension(430, 100));
         setUndecorated(true);
-        setSize(200, 20);
-        setLocation(200, 200);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
         requestFocus();
     }

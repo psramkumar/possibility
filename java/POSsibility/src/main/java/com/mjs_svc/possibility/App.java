@@ -372,6 +372,7 @@ public class App extends JFrame implements UserListener {
 
         // Pack!
         pack();
+        setLocationRelativeTo(null);
     }
 
     /**
