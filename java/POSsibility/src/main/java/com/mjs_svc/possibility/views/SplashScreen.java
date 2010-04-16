@@ -1,5 +1,6 @@
 package com.mjs_svc.possibility.views;
 
+import com.mjs_svc.possibility.util.Version;
 import java.awt.*;
 import javax.swing.*;
 
@@ -20,7 +21,9 @@ public class SplashScreen extends JFrame {
         logo = new JLabel(new ImageIcon(getClass().getResource("/possibility-logo.png")));
         add(logo, BorderLayout.NORTH);
 
-        text = new JLabel("Version: Dev Snapshot; By MJS Services http://mjs-svc.com");
+        text = new JLabel("Version: " + Version.getVersion() 
+                + " build: " + Version.getBuild()
+                + "; By MJS Services http://mjs-svc.com");
         add(text);
 
         progress = new JProgressBar(0, 4);

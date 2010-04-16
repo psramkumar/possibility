@@ -6,7 +6,14 @@ package com.mjs_svc.possibility.util;
  * @version $Id$
  */
 public class Version {
+    private static final String version = "Dev Snapshot";
+    private static final int build = Integer.parseInt(
+            "$Rev$".replace("[\\$\\s]", "").replace("Rev:", ""));
+
+    public static int getBuild() {
+        return build;
+    }
     public static String getVersion() {
-        return "Dev Snapshot, build: $Rev$";
+        return version;
     }
 }
