@@ -22,7 +22,7 @@ public class SplashScreen extends JFrame {
         add(logo, BorderLayout.NORTH);
 
         text = new JLabel("Version: " + Version.getVersion() 
-                + " build: " + Version.getBuild()
+                + ", build: " + Version.getBuild()
                 + "; By MJS Services http://mjs-svc.com");
         add(text);
 
