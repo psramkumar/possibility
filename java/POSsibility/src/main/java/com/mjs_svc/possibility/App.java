@@ -221,6 +221,7 @@ public class App extends JFrame implements UserListener {
                 JInternalFrame allEmployees = new JInternalFrame(
                         employees.title,
                         employees.resizable,
+                        employees.closable,
                         employees.maximizable,
                         employees.iconifiable);
                 allEmployees.setContentPane(employees);
@@ -231,6 +232,23 @@ public class App extends JFrame implements UserListener {
         });
         vpEmployees.add(vpe_all);
         vpe_filter = new JMenuItem(menuRB.getString("view.people.employees.filter"));
+        vpe_filter.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EmployeeFilter empFilter = new EmployeeFilter();
+                @SuppressWarnings("static-access")
+                JInternalFrame filterEmployees = new JInternalFrame(
+                        empFilter.title,
+                        empFilter.resizable,
+                        empFilter.closable,
+                        empFilter.maximizable,
+                        empFilter.iconifiable);
+                filterEmployees.setContentPane(empFilter);
+                filterEmployees.pack();
+                filterEmployees.setVisible(true);
+                desktop.add(filterEmployees);
+            }
+        });
         vpEmployees.add(vpe_filter);
         vpEmployees.addSeparator();
         vpe_new = new JMenuItem(menuRB.getString("view.people.employees.new"));

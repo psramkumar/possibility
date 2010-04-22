@@ -72,6 +72,11 @@ public class EmployeeList extends JPanel  implements PingSubscriber {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    @Override
     public void onPing() {
         employeeTable.setModel(new EmployeeListTableModel(query));
     }
