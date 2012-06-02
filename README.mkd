@@ -1,0 +1,4 @@
+POSsibility
+===========
+
+POSsibility is an attempt to tie a Django web application to a java desktop application in order to create a Point-of-Sale system that would work just as well in a restaurant as for a web-store, after configuration.  Portions of it are included in Objets d'Art, a Django web store.
